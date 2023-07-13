@@ -1,0 +1,48 @@
+/* MODEST Title */
+.title{
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+/* DASHBOARD HEADER */
+.header{
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.underline {
+    display: inline-block;
+    border-bottom: 2px solid #000000; 
+    padding: 5px 30px; /* This controls the extra length on each side of the word */
+    box-sizing: border-box;
+}
+
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+/* ITEMS in table */
+td, th {
+    border: 5px solid #dddddd;
+    text-align: left;
+    padding: 15px;
+}
+
+/* Button to add jobs */
+.AddJob {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    margin: 20px 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}

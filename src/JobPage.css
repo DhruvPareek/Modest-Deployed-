@@ -1,0 +1,23 @@
+/* Job HEADER */
+.header{
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jobPageTable td,.jobPageTable th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 15px;
+    border-radius: 20px;
+}
+
+/* Button to add item */
+.AddItem {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    padding: 10px;
+    margin: 20px 20px;
+}
