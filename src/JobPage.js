@@ -53,7 +53,7 @@ function JobPage() {
     return (
         <section>
       <nav><br />
-        <Link to="/dashboard">
+        <Link to="/">
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAZlBMVEX///8AAAD7+/s6Ojri4uLz8/OUlJSkpKTv7+8+Pj67u7tvb29NTU0bGxvp6enW1tYhISFSUlLFxcWAgIB6enpbW1tEREQQEBBoaGjc3NxhYWGXl5cxMTHNzc1zc3MTExONjY0qKipyIqj+AAACs0lEQVR4nO3da1bCQAyG4U4RBEXACyLewP1vUg/qUejkX2rsl/dZQXLQNOlMZ5oGAAAAAAAAAAAAAAAAAABgINqzRXQIfVrsN+XD9UV0IH2ZlG+zbXQsvViXX26io+nBZTlyFh2Pu8lxguUtOiBvF+WUWLnZdhIs6+iYXI27CZbVODoqR+19JUOpWnNZS1Apw9My+kWnfeuW0YNRdFxulvUEyz46MC/TlZGhzB9ptYwq/YSPRoLX0YF5eTISfFZ53BtlVOdZaJXR8hIdmZPxxkjwPDoyLzMjwdvowLzUu1GhMmp0o2XVRkfmxCyjKr1MZaj/pPKSbapeRutDfYYyOo8OzEveMirfjcqU0SvxMmp2o6/RgXl5MBKU70YZ6odCvozWlpgOZMqo1Y3eRQfmJW03uqMbHQj9oV69G22tblSmjFrdqEwZtZaYZHaUyJdR+W50uhMvo83ISJChfiisbvSNMjoQ+t2oleBT0/6pvhI0l5jKbPSnZuvbZS8ZWkN9iHkP33BYZTSK+974m+iMOpzLW2ttqww0dc3QfBIGcl1EN7d0Rdp4NlLmyBTKc0vgeXQyVZ4D2397VHyaOGao/xvq/x+OrVfAkVxrqTnbR/LdVKbf0+j3pf/vgdHDd7fy82GCGV//PU2Cd20J3pcmeOedYN0iwdpTgvVD/TXgFAVVfi9Ggv00CfZE6e9ro0PVIL9HOME+7wR79RN8b0GHKkH+27UUI7/8N6QZOlQKqgL5MxUydKj6Z5von0+Te+RXOScqdUFN0KHqFFT9cxP1z75M0aHKn0Gb4BzhBGdBJzjPW/9M9gTn6ie4GyHB/RYJ7ijRv2cmwV1BCe576hbU5+iA/Mnfu3bShOu8cvvtZ5QSvf+waRaTw8rbWq7IHFk4f30FAAAAAAAAAAAAAAAAAAAQ7R3PuilZ9nUhMgAAAABJRU5ErkJggg==" style={{width: '50px', height: '50px'}} alt="Dashboard" />
         </Link>
       </nav>
