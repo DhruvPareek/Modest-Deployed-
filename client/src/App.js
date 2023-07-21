@@ -13,7 +13,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/job/:jobId" element={<JobPage />} />
-        {/* <Route path="*" element={<Navigate to="/dashboard" />} /> Add this line */}
       </Routes>
     </section>
   );
