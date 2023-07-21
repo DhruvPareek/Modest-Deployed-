@@ -70,8 +70,14 @@ function Dashboard() {
       <section>
       <div className="header">
         <span className="underline">Dashboard</span>
-      </div>
-        <div className="button-container">
+      </div>        
+      <div className="button-container">
+        <label>Job Name:  </label>
+        <input type="text" id="Job-Name-Input" />
+        <label>Start Date:  </label>
+        <input type="text" id="StartDate-Input" />
+        <label>End Date:  </label>
+        <input type="text" id="EndDate-Input" />
           <button className="AddJob" onClick={addRow}>Add Job</button>
         </div>
         <table>

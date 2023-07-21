@@ -37,12 +37,28 @@ td, th {
 /* Button to add jobs */
 .AddJob {
     font-family: 'Roboto', sans-serif;
-    font-size: 18px;
-    padding: 10px;
-    margin: 20px 20px;
+    font-size: 16px;
+    padding: 5px;
+    margin: 0px 10px;
 }
 
 .button-container {
     display: flex;
     justify-content: flex-end;
+    margin: 40px 0px;
+}
+
+#Job-Name-Input {
+    height: 20px; /* or any height you want */
+    margin: 0px 15px 0px 7px;
+}
+
+#StartDate-Input {
+    height: 20px; /* or any height you want */
+    margin: 0px 15px 0px 7px;
+}
+
+#EndDate-Input {
+    height: 20px; /* or any height you want */
+    margin: 0px 15px 0px 7px;
 }
