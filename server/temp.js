@@ -12,7 +12,14 @@ app.use(express.urlencoded({ extended: false }));
 
 //create
 app.post('/insert', (request, response) => {
-    
+    const {name, startDate, endDate} = request.body;
+    const db = dbService.getDBServiceInstance();
+
+    const result = db.insertNewJob(name, startDate, endDate);
+
+    result
+    .then(data => response.json({success : true}))
+    .catch(err => console.log(err));
 });
 
 //read
