@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-//create
+//Add to database
 app.post('/insert', (request, response) => {
     const {name, startDate, endDate} = request.body;
     const db = dbService.getDBServiceInstance();

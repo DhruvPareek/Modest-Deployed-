@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 let instance = null;
 dotenv.config();
 
+//Database connection
 const connection = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.USER,
@@ -18,6 +19,7 @@ connection.connect((err) => {
      }
 });
 
+//All databse interaction functions, these are where queries come from
 class DBService{
     static getDBServiceInstance() {
         return instance ? instance : new DBService();
@@ -33,7 +35,7 @@ class DBService{
                     resolve(results);
                 })
             });
-            // console.log(response);
+
             return response;
 
         } catch (error) {

@@ -48,6 +48,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function insertRowIntoTable(data) {
 
 } 
+
+//This waits until the page is loaded before running the code that retrieves all items from MySQL table
 document.addEventListener("DOMContentLoaded", function () {
   fetch('http://localhost:5000/getAll')
   .then(response => response.json())

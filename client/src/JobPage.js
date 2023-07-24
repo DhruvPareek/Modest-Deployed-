@@ -1,7 +1,7 @@
 import "./JobPage.css";
 import React from "react";
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom"; // Import useParams
+import { useParams, Link } from "react-router-dom";
 
 
 function JobPage() {

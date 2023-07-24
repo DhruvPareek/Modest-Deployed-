@@ -4,6 +4,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import JobPage from "./JobPage";
 import { useState } from "react";
 
+//Title of dashboard and routes to different pages
 export default function App() {
   return (
     <section>
@@ -18,6 +19,7 @@ export default function App() {
   );
 }
 
+//Dashboard page
 function Dashboard() {
   function Jobs() {
     const [rows, setRows] = useState([]);
@@ -68,9 +70,12 @@ function Dashboard() {
 
     return (
       <section>
+
       <div className="header">
         <span className="underline">Dashboard</span>
       </div>        
+
+      {/* Fields and buttons for adding a new job */}
       <div className="button-container">
         <label>Job Name:  </label>
         <input type="text" id="Job-Name-Input" />
@@ -79,7 +84,9 @@ function Dashboard() {
         <label>End Date:  </label>
         <input type="text" id="EndDate-Input" />
           <button className="AddJob" onClick={addRow} id="AddJob-btn">Add Job</button>
-        </div>
+      </div>
+
+      {/* Table of jobs */}
         <table>
           <thead>
             <tr>
@@ -94,6 +101,7 @@ function Dashboard() {
           <tbody>
         {rows.map((row, index) => (
           <tr key={index}>
+            {/* This section is what will be displayed for a row if the user is editing the row */}
             {editingIndex === index ? (
               <React.Fragment>
                 <td><input type="text" defaultValue={row.job} onBlur={(e) => row.job = e.target.value} /></td>
@@ -104,7 +112,8 @@ function Dashboard() {
                 <td>{row.lastEdited = getDateString()}</td>
                 <td><button onClick={() => saveRow(index, row)}>Save</button></td>
               </React.Fragment>
-            ) : (
+            ) : {/* This next section is what will be displayed for a row if the user is not editing the row */}
+            (
               <React.Fragment>
                 <td><Link to={`/job/${row.job} ${row.startDateM}${'-'}${row.startDateD}${'-'}${row.startDateY}${' to '}${row.endDateM}${'-'}${row.endDateD}${'-'}${row.endDateY}`}>{row.job}</Link></td>
                 <td>{row.startDateM}{'-'}{row.startDateD}{'-'}{row.startDateY}{' to '}{row.endDateM}{'-'}{row.endDateD}{'-'}{row.endDateY}</td>
