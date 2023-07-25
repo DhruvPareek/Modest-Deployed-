@@ -26,6 +26,10 @@ function Dashboard() {
     const [editingIndex, setEditingIndex] = useState(null);
     const [newJob, setNewJob] = useState(false);
 
+    const [jobName, setJobName] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
       fetch('http://localhost:5000/getAll')
@@ -64,15 +68,15 @@ function Dashboard() {
         <span className="underline">Dashboard</span>
       </div>        
 
-      {/* Fields and buttons for adding a new job */}
+      {/* Fields and buttons for adding a new job, this also requires that all three fields hold some value before the 'Add Job' button can be clicked */}
       <div className="button-container">
         <label>Job Name:  </label>
-        <input type="text" id="Job-Name-Input" />
+        <input type="text" id="Job-Name-Input" value={jobName} onChange={e => setJobName(e.target.value)} />
         <label>Start Date:  </label>
-        <input type="text" id="StartDate-Input" />
+        <input type="text" id="StartDate-Input" value={startDate} onChange={e => setStartDate(e.target.value)} />
         <label>End Date:  </label>
-        <input type="text" id="EndDate-Input" />
-          <button className="AddJob" onClick={addRow} id="AddJob-btn">Add Job</button>
+        <input type="text" id="EndDate-Input" value={endDate} onChange={e => setEndDate(e.target.value)} />
+        <button className="AddJob" onClick={addRow} id="AddJob-btn" disabled={!jobName || !startDate || !endDate}>Add Job</button>
       </div>
 
       {/* Table of jobs */}

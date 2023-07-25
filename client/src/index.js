@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const endDateInput = document.querySelector('#EndDate-Input');
     const endDate = endDateInput.value;
     endDateInput.value = '';    
-  
+
     fetch('http://localhost:5000/insert', {
       headers: {  
         'Content-type': 'application/json'
