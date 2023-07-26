@@ -8,7 +8,7 @@ const dbService = require('./dbService');
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false })); 
 
 //Add to database
 app.post('/insert', (request, response) => {
@@ -36,6 +36,15 @@ app.get('/getAll', (request, response) => {
 
 
 //delete
+app.delete('/delete/:id', (request, response) => {
+     const { id } = request.params;
+     const db = dbService.getDBServiceInstance();
 
+    const result = db.deleteRowByID(id);
+    
+    result
+    .then(data => response.json({success : data}))
+    .catch(err => console.log(err));
+});
 
 app.listen(process.env.PORT, () => console.log('app is running'));

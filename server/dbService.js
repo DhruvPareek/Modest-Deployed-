@@ -15,8 +15,7 @@ const connection = mysql.createConnection({
 connection.connect((err) => {
     if(err) {
         console.log(err.message);
-    } else {
-     }
+    } 
 });
 
 //All database interaction functions, these make queries to the database and return results
@@ -63,6 +62,29 @@ class DBService{
 
         } catch (error) {
             console.log(error);
+        }
+    }
+    
+    async deleteRowByID(id){
+        try {
+            id = parseInt(id, 10);
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM Jobs_List WHERE id = ?";
+    
+                connection.query(query, [id], (err, result) => {
+                    if(err) {
+                        console.log("Error:", err);
+                        reject(new Error(err.message));
+                    }
+                    console.log("Result:", result);
+                    resolve(result.affectedRows);
+                })
+            });
+
+            return response === 1 ? true : false;
+        } catch(error){
+            console.log(error);
+            return false;
         }
     }
 }
