@@ -3,6 +3,7 @@ import "./app.css";
 import { Routes, Route, Link } from "react-router-dom";
 import JobPage from "./JobPage";
 import { useState, useEffect } from "react";
+import { handleEditClick } from './index.js';
 
 //Title of dashboard and routes to different pages
 export default function App() {
@@ -51,17 +52,15 @@ function Dashboard() {
       setRows(newRows);
     }
 
+  //This changes the job that we want to edit into textboxes that can be typed into
     const editRow = (index) => {
       setEditingIndex(index);
-    }
-
-    const saveRow = (index, updatedRow) => {
-      const newRows = [...rows];
-      newRows[index] = updatedRow;
-      setRows(newRows);
+  }
+  
+  //This just changes the job that was being edited back to a regular row in the table
+  const saveRow = () => {
       setEditingIndex(null);
-    }
-
+  }
     return (
       <section>
       <div className="header">
@@ -93,23 +92,40 @@ function Dashboard() {
             </tr>
           </thead>
           <tbody>
-        {rows.map((row, index) => (
-          <tr key={index}>
-            {/* This section is what will be displayed for a Job, for each job */}
-            {
-              <React.Fragment>
+          {rows.map((row, index) => (
+      <tr key={index}>
+        {/*This is what is displayed while a job is being edited, the names and dates become textboxes that can be edited, while the edit button becomes a save button */}
+        {editingIndex === index ? (
+            <React.Fragment>
                 <td>{row.ID}</td>
-                <td><Link to={`/job/${row.Name}`}>{row.Name}</Link></td>
-                <td>{new Date(row.Start_Date).toLocaleDateString()}{' to '}{new Date(row.End_Date).toLocaleDateString()}</td>
+                <td><input type="text" data-id={row.ID} id="update-name-input" defaultValue={row.Name} /></td>
+                <td>
+                    <input type="text" id="update-startDate-input" defaultValue={new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')} />
+                    {' to '}
+                    <input type="text" id="update-endDate-input" defaultValue={new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')} />
+                </td>
                 <td>{row.CO2Emissions}</td>
                 <td>{row.CH4Emissions}</td>
                 <td>{row.N2OEmissions}</td>
-                <td>{new Date(row.Date_Added).toLocaleDateString()}</td>
+                <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
+                <td><button class="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
+                <td><button class="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleEditClick();}}>Save</button></td>
+                {/* The save button calls the handleEditClick function to send query to databse to update */}
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+                <td>{row.ID}</td>
+                <td><Link to={`/job/${row.Name}`}>{row.Name}</Link></td>
+                <td>{new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}{' to '}{new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
+                <td>{row.CO2Emissions}</td>
+                <td>{row.CH4Emissions}</td>
+                <td>{row.N2OEmissions}</td>
+                <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
                 <td><button class="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td>
-                <td><button class="edit-btn" data-id={row.ID} onClick={() => editRow(index)}>Edit</button></td>
-              </React.Fragment>
-            }
-          </tr>
+                <td><button class="editJob-btn" data-id={row.ID} onClick={() => editRow(index)}>Edit</button></td>
+            </React.Fragment>
+        )}
+      </tr>
         ))}
       </tbody>
     </table>

@@ -12,13 +12,40 @@ root.render(
   </BrowserRouter>
 );
 
+//This converts all of the dates into correct format for a SQL query, then sends that stuff to /update
+export function handleEditClick(){
+  const name = document.querySelector('#update-name-input');
+
+  var startDate = document.querySelector('#update-startDate-input').value;
+  let dateParts = startDate.split('-');
+  startDate = dateParts[2] + '-' + dateParts[0] + '-' + dateParts[1];
+
+  var endDate = document.querySelector('#update-endDate-input').value;
+  let dateParts2 = endDate.split('-');
+  endDate = dateParts2[2] + '-' + dateParts2[0] + '-' + dateParts2[1];
+
+  fetch('http://localhost:5000/update', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: name.dataset.id, name: name.value, startDate: startDate, endDate: endDate })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      document.location.reload();
+    }
+  })
+}
+
+
 /*This waits until the page is loaded before running the code that listens
 for someone adding a job, deleting a job, or editing a job*/
 document.addEventListener('DOMContentLoaded', (event) => {
   /* LISTENING FOR DELETING AND EDITING JOBS */
   document.querySelector('table tbody').addEventListener('click', function(event) {
     if (event.target.className === "delete-btn") {
-        console.log(event.target.dataset.id);
         deleteRowById(event.target.dataset.id);
     }
     if (event.target.className === "edit-btn") {

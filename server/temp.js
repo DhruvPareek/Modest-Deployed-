@@ -32,8 +32,17 @@ app.get('/getAll', (request, response) => {
     .catch(err => console.log(err));
 })
 
-//update
-
+//update a jb in the database, it can update name, startDate, endDate
+app.patch('/update', (request, response) => {
+    const {id, name, startDate, endDate} = request.body
+    const db = dbService.getDBServiceInstance();  
+    console.log("ID: " + id + " Name: " + name + " Start Date: " + startDate + " End Date: " + endDate);
+    const result = db.updateJobByID(id, name, startDate, endDate);
+    
+    result
+    .then(data => response.json({success : data}))
+    .catch(err => console.log(err));
+});
 
 //delete a job from the database
 app.delete('/delete/:id', (request, response) => {
