@@ -24,6 +24,7 @@ class DBService{
         return instance ? instance : new DBService();
     }
 
+    //Returns all jobs from Jobs list
     async getAllData() {
         try {
             const response = await new Promise((resolve, reject) => {
@@ -42,6 +43,7 @@ class DBService{
         }
     }
 
+    //Adds a new job to the Jobs list table in database
     async insertNewJob(name, startDate, endDate) {
         try {
             const dateAdded = new Date();
@@ -65,6 +67,7 @@ class DBService{
         }
     }
     
+    //deletes a job from the Jobs list table in database
     async deleteRowByID(id){
         try {
             id = parseInt(id, 10);

@@ -95,7 +95,7 @@ function Dashboard() {
           <tbody>
         {rows.map((row, index) => (
           <tr key={index}>
-            {/* This section is what will be displayed for a row if the user is editing the row */}
+            {/* This section is what will be displayed for a Job, for each job */}
             {
               <React.Fragment>
                 <td>{row.ID}</td>
