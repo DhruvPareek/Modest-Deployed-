@@ -2,18 +2,19 @@ import "./JobPage.css";
 import React from "react";
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { loadItemsIntoJobPage } from './index.js';
 
 
 function JobPage() {
     const [rows, setRows] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [jobType, setJobType] = useState('Producer');
-    const { jobId } = useParams();
+    const { jobName,  jobID } = useParams();
 
     const jobData = {
         'Producer': {
             item: "Producer",
-            section: "a",
+            category: "a",
             scope: "6",
             criteria: "ferd",
             data: {value: "ched", err: "err"},
@@ -21,7 +22,7 @@ function JobPage() {
         },
         'Actor': {
             item: "Actor",
-            section: "juan",
+            category: "juan",
             scope: "5",
             criteria: "jeef",
             data: "geeg",
@@ -58,20 +59,20 @@ function JobPage() {
         </Link>
       </nav>
         <div className="header">
-            <span className="underline">{jobId}</span> {/* Use jobId as the title */}
+            <span className="underline">{jobName}</span> {/* Use jobName as the title */}
         </div>
         <div className="button-container">
             <select value={jobType} onChange={e => setJobType(e.target.value)}>
                 <option value="Producer">Producer</option>
                 <option value="Actor">Actor</option>
             </select>
-            <button className="AddItem" onClick={addRow}>Add Item</button>
+            <button className="AddItem" onClick={() => {addRow();loadItemsIntoJobPage(jobID);}}>Add Item</button>
         </div>
         <table className="jobPageTable">
             <thead>
                   <tr>
                     <th>Item</th>
-                    <th>Section</th>
+                    <th>Category</th>
                     <th>Scope</th>
                     <th>EPA Criteria</th>
                     <th colSpan="2">Data</th>
@@ -86,7 +87,7 @@ function JobPage() {
             {editingIndex === index ? (
               <React.Fragment>
                 <td><input type="text" style={{width: '90px'}} defaultValue={row.item} onBlur={(e) => row.item = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={row.section} onBlur={(e) => row.section = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={row.category} onBlur={(e) => row.category = e.target.value} /></td>
                 <td><input type="text" style={{width: '90px'}} defaultValue={row.scope} onBlur={(e) => row.scope = e.target.value} /></td>
                 <td><input type="text" style={{width: '90px'}} defaultValue={row.criteria} onBlur={(e) => row.criteria = e.target.value} /></td>
                  {/* If this row corresponds to a 'Producer' item, render two input fields */}
@@ -108,7 +109,7 @@ function JobPage() {
             ) : (
               <React.Fragment>
                 <td>{row.item}</td>
-                <td>{row.section}</td>
+                <td>{row.category}</td>
                 <td>{row.scope}</td>
                 <td>{row.criteria}</td>
                  {/* If this row corresponds to a 'Producer' item, render two input fields */}

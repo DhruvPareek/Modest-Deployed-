@@ -13,18 +13,21 @@ root.render(
 );
 
 //This converts all of the dates into correct format for a SQL query, then sends that stuff to /update
-export function handleEditClick(){
-  const name = document.querySelector('#update-name-input');
+export function handleJobEditClick(){
+  var name = document.querySelector('#update-name-input');
+  name.value = name.value.replace(/[^a-zA-Z0-9-,@:&$() ]/g, '');
 
   var startDate = document.querySelector('#update-startDate-input').value;
+  startDate = startDate.replace(/[^0-9-]/g, '');
   let dateParts = startDate.split('-');
   startDate = dateParts[2] + '-' + dateParts[0] + '-' + dateParts[1];
 
   var endDate = document.querySelector('#update-endDate-input').value;
+  endDate = endDate.replace(/[^0-9-]/g, '');
   let dateParts2 = endDate.split('-');
   endDate = dateParts2[2] + '-' + dateParts2[0] + '-' + dateParts2[1];
 
-  fetch('http://localhost:5000/update', {
+  fetch('http://localhost:5000/updateJob', {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
@@ -39,6 +42,17 @@ export function handleEditClick(){
   })
 }
 
+export function loadItemsIntoJobPage(jobID){
+  fetch('http://localhost:5000/loadItems', {
+    headers: {  
+      'Content-type': 'application/json'
+    },
+    method: 'POST',
+    body: JSON.stringify({ id:jobID })
+  })
+  .then(response => response.json());
+
+}
 
 /*This waits until the page is loaded before running the code that listens
 for someone adding a job, deleting a job, or editing a job*/
@@ -46,7 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   /* LISTENING FOR DELETING AND EDITING JOBS */
   document.querySelector('table tbody').addEventListener('click', function(event) {
     if (event.target.className === "delete-btn") {
-        deleteRowById(event.target.dataset.id);
+        deleteJobById(event.target.dataset.id);
     }
     if (event.target.className === "edit-btn") {
         // handleEditRow(event.target.dataset.id);
@@ -54,8 +68,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   });
 
   /* DELETE A JOB */
-  function deleteRowById(id){
-    fetch('http://localhost:5000/delete/' + id, { 
+  function deleteJobById(id){
+    fetch('http://localhost:5000/deleteJob/' + id, { 
         method: 'DELETE'
     })
     .then(response => response.json())
@@ -71,7 +85,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
   addBtn.onclick = function () {
 
     const nameInput = document.querySelector('#Job-Name-Input');
-    const name = nameInput.value;
+    var name = nameInput.value;
+    name = name.replace(/[^a-zA-Z0-9-,@:&$() ]/g, '');
     nameInput.value = '';
   
     /* The user enters the date in the format MM-DD-YYYY for startDate and endDate, 
@@ -79,17 +94,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
     because the database stores dates in the format YYYY-MM-DD */
     const startDateInput = document.querySelector('#StartDate-Input');
     var startDate = startDateInput.value;
+    startDate = startDate.replace(/[^0-9-]/g, '');
     let dateParts = startDate.split('-');
     startDate = dateParts[2] + '-' + dateParts[0] + '-' + dateParts[1];
     startDateInput.value = '';  
   
     const endDateInput = document.querySelector('#EndDate-Input');
     var endDate = endDateInput.value;
+    endDate = endDate.replace(/[^0-9-]/g, '');
     let dateParts2 = endDate.split('-');
     endDate = dateParts2[2] + '-' + dateParts2[0] + '-' + dateParts2[1];
     endDateInput.value = '';    
 
-    fetch('http://localhost:5000/insert', {
+    fetch('http://localhost:5000/insertJob', {
       headers: {  
         'Content-type': 'application/json'
       },
@@ -97,17 +114,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       body: JSON.stringify({ name: name, startDate: startDate, endDate: endDate })
     })
     .then(response => response.json());
-    // .then(data => insertRowIntoTable(data['data']));
   }  
 });
 
-// function insertRowIntoTable(data) {
-
-// } 
-
 //This waits until the page is loaded before running the code that retrieves all items from MySQL table
 document.addEventListener("DOMContentLoaded", function () {
-  fetch('http://localhost:5000/getAll')
+  fetch('http://localhost:5000/getAllJobs')
   .then(response => response.json());
   // .then(data => console.log(data));
 });

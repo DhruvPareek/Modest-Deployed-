@@ -19,13 +19,13 @@ connection.connect((err) => {
 });
 
 //All database interaction functions, these make queries to the database and return results
-class DBService{
+class JobDBService{
     static getDBServiceInstance() {
-        return instance ? instance : new DBService();
+        return instance ? instance : new JobDBService();
     }
 
     //Returns all jobs from Jobs list
-    async getAllData() {
+    async getAllJobs() {
         try {
             const response = await new Promise((resolve, reject) => {
                 const query = "SELECT * FROM Jobs_List;";
@@ -68,7 +68,7 @@ class DBService{
     }
     
     //deletes a job from the Jobs list table in database
-    async deleteRowByID(id){
+    async deleteJobByID(id){
         try {
             id = parseInt(id, 10);
             const response = await new Promise((resolve, reject) => {
@@ -114,6 +114,15 @@ class DBService{
         }
     }
 
+    async addItemsForJob(id){
+        try{
+            id = parseInt(id, 10);
+
+        }catch(error){
+            console.log(error);
+            return false;
+        }
+    }
 }
 
-module.exports = DBService;
+module.exports = JobDBService;

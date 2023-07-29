@@ -3,7 +3,7 @@ import "./app.css";
 import { Routes, Route, Link } from "react-router-dom";
 import JobPage from "./JobPage";
 import { useState, useEffect } from "react";
-import { handleEditClick } from './index.js';
+import { handleJobEditClick } from './index.js';
 
 //Title of dashboard and routes to different pages
 export default function App() {
@@ -14,7 +14,7 @@ export default function App() {
       </nav>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/job/:jobId" element={<JobPage />} />
+        <Route path="/job/:jobName/:jobID" element={<JobPage />} />
       </Routes>
     </section>
   );
@@ -33,7 +33,7 @@ function Dashboard() {
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
-      fetch('http://localhost:5000/getAll')
+      fetch('http://localhost:5000/getAllJobs')
         .then(response => response.json())
         .then(data => {
           setRows(data.data);
@@ -82,7 +82,7 @@ function Dashboard() {
         <table>
           <thead>
             <tr>
-              <th>ID</th>
+              {/* <th>ID</th> */}
               <th>Jobs</th>
               <th>Dates</th>
               <th>Total CO2</th>
@@ -97,7 +97,7 @@ function Dashboard() {
         {/*This is what is displayed while a job is being edited, the names and dates become textboxes that can be edited, while the edit button becomes a save button */}
         {editingIndex === index ? (
             <React.Fragment>
-                <td>{row.ID}</td>
+                {/* <td>{row.ID}</td> */}
                 <td><input type="text" data-id={row.ID} id="update-name-input" defaultValue={row.Name} /></td>
                 <td>
                     <input type="text" id="update-startDate-input" defaultValue={new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')} />
@@ -109,13 +109,13 @@ function Dashboard() {
                 <td>{row.N2OEmissions}</td>
                 <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
                 <td><button class="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
-                <td><button class="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleEditClick();}}>Save</button></td>
+                <td><button class="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleJobEditClick();}}>Save</button></td>
                 {/* The save button calls the handleEditClick function to send query to databse to update */}
             </React.Fragment>
           ) : (
             <React.Fragment>
-                <td>{row.ID}</td>
-                <td><Link to={`/job/${row.Name}`}>{row.Name}</Link></td>
+                {/* <td>{row.ID}</td> */}
+                <td><Link to={`/job/${row.Name}/${row.ID}`}>{row.Name}</Link></td>
                 <td>{new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}{' to '}{new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
                 <td>{row.CO2Emissions}</td>
                 <td>{row.CH4Emissions}</td>
