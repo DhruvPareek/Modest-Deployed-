@@ -1,15 +1,27 @@
 import "./JobPage.css";
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { loadItemsIntoJobPage } from './index.js';
 
 
 function JobPage() {
     const [rows, setRows] = useState([]);
+    const [items, setItems] = useState([]);
+    const [newItem, setNewItem] = useState(false);
+
     const [editingIndex, setEditingIndex] = useState(null);
     const [jobType, setJobType] = useState('Producer');
     const { jobName,  jobID } = useParams();
+
+    //This populates the array with jobs from database, it will run everytime newJob is changed
+    useEffect(() => {
+      fetch('http://localhost:5000/getAllItems/' + jobID )
+        .then(response => response.json())
+        .then(data => {
+          setItems(data.data);
+        });
+    }, [newItem]);
 
     const jobData = {
         'Producer': {
@@ -32,6 +44,8 @@ function JobPage() {
 
     const addRow = () => {
         setRows([...rows, jobData[jobType]]);
+        setNewItem(!newItem);
+        document.location.reload();
     }
   
       const delRow = (index) => {
@@ -44,12 +58,12 @@ function JobPage() {
         setEditingIndex(index);
       }
   
-      const saveRow = (index, updatedRow) => {
-        const newRows = [...rows];
-        newRows[index] = updatedRow;
-        setRows(newRows);
-        setEditingIndex(null);
-      }
+      // const saveRow = (index, updatedRow) => {
+      //   const newRows = [...rows];
+      //   newRows[index] = updatedRow;
+      //   setRows(newRows);
+      //   setEditingIndex(null);
+      // }
 
     return (
         <section>
@@ -82,50 +96,26 @@ function JobPage() {
                   </tr>
             </thead>
             <tbody>
-            {rows.map((row, index) => (
+            {items.map((item, index) => (
           <tr key={index}>
             {editingIndex === index ? (
               <React.Fragment>
-                <td><input type="text" style={{width: '90px'}} defaultValue={row.item} onBlur={(e) => row.item = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={row.category} onBlur={(e) => row.category = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={row.scope} onBlur={(e) => row.scope = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={row.criteria} onBlur={(e) => row.criteria = e.target.value} /></td>
-                 {/* If this row corresponds to a 'Producer' item, render two input fields */}
-    {row.item === 'Producer' ? (
-      <React.Fragment>
-        <td><input type="text" style={{width: '90px'}} defaultValue={row.data.value} onBlur={(e) => row.data.value = e.target.value} /></td>
-        <td><input type="text" style={{width: '90px'}} defaultValue={row.data.err} onBlur={(e) => row.data.err = e.target.value} /></td>
-      </React.Fragment>
-    ) : (
-      /* Otherwise, render one input field */
-      <React.Fragment>
-      <td><input type="text" style={{width: '90px'}} defaultValue={row.data} onBlur={(e) => row.data = e.target.value} /></td>
-      <td></td>
-      </React.Fragment>
-    )}
-                <td>{row.subCO2 + "kg"}</td><td>{row.subCH4 + "kg"}</td><td>{row.subN2O + "kg"}</td>
-                <td><button onClick={() => saveRow(index, row)}>Save</button></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={item.Item_Name} onBlur={(e) => item.Item_Name = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={item.Section} onBlur={(e) => item.Section = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={item.Category} onBlur={(e) => item.Category = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={item.EPA_Category} onBlur={(e) => item.EPA_Category = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={item.Data_1} onBlur={(e) => item.Data_1 = e.target.value} /></td>
+                <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
+                {/* <td><button onClick={() => saveRow(index, row)}>Save</button></td> */}
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <td>{row.item}</td>
-                <td>{row.category}</td>
-                <td>{row.scope}</td>
-                <td>{row.criteria}</td>
-                 {/* If this row corresponds to a 'Producer' item, render two input fields */}
-    {row.item === 'Producer' ? (
-      <React.Fragment>
-        <td>{row.data.value}</td>
-        <td>{row.data.err}</td>
-      </React.Fragment>
-    ) : (
-      /* Otherwise, render one input field */
-      <React.Fragment>
-      <td>{row.data}</td>
-      <td></td>
-      </React.Fragment>
-    )}
-                <td>{row.subCO2 + "kg"}</td><td>{row.subCH4 + "kg"}</td><td>{row.subN2O + "kg"}</td>
+                <td>{item.Item_Name}</td>
+                <td>{item.Section}</td>
+                <td>{item.Category}</td>
+                <td>{item.EPA_Category}</td>
+                <td>{item.Data_1}</td>
+                <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
                 <td><button onClick={() => delRow(index)} style={{padding: '0', border: 'none', width: '30px', height: '30px'}}><img src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAeFBMVEX///8AAADHx8e7u7u/v7/Ly8uzs7PDw8NnZ2dbW1sjIyMXFxfT09O3t7fOzs7S0tLo6Oji4uJFRUWYmJirq6sICAj09PRMTEw2NjYuLi4cHBynp6dUVFSLi4t+fn7a2to+Pj57e3sQEBCGhoaamppxcXHw8PBlZWXb7nSSAAAD4UlEQVR4nO2d23qqMBBG8UhtQUXEI2qrtvv933ALEUjUqCEZEv3+dQvpZIkHOgkzngcAAAAAAAAAAJhl7HeU8ce2Z33FcNKqxWRke+Yi66SeR6uV9G3PnadXVyMz2dmePUfN9xUjtT37irGORyuZ2Z5/ia8l0hrann9JV0+kbXv+JRCBCBEQcVok9p9g8wIi/jMjQoiQAhGIEAERiBABEYjUYzZ8kGcT7pw2z2TmDiojDKW+Ztt9yzKrowmPb9saGb/6Ih+2HRja+ci/2rlQsyx1Rfq2DQp0E6uxbYGCqabI2rZAwVpTZGdboKCrKeItbBsw9tqZ7o5tBcZB18PzDo+j0GNkDWX6aVvjKzbhcSJq26Tn0tocAAAAAAAp467/Rx6jQx4jyDc0paS3cb08kzaIKGOE5+RQEtLFmJ5j7AlTwrsyyZUEVDGCMsYX3c7NQfW/zpwqxryK8UEVY8ZnHYk+jfxmvD1NiIstmETvYGGpheo7RQiinWe6jZCi7dHEgIgKEFEBIgo0L3JvFXoWp4vJ9sbNUrSdLNL4Xj7aKRF/lZ+RXCU6Y/aLurrzG+SSSLu8AbhYVS6X4xP5JnKXRKqcdyK8u7g1I/nSpkMiU+6kH/4Av9DdkY12SOSXO+mbP7CUGfI4JMLd67c++QNf3AHpHTpEVIAIAyLGEUSkv84QyYGIChBhQMQ4EGFAxDjdp4JAJAciKkCEARHjvKeINMcGkRyIqAARBkSMI4hIn6mDSA5EVIAIAyLGeU8R6RY6iORARAWIMCBiHIgwIGIciDAgYhyIMCBiHIgwXk3khzvpmz/A1/NwaE+jVKQjmy9v6NAuU/nTYtVu0r3wuFdUPdm0kA52SSQoCotd1rY/FmNX8mcMXRLxAlZbbHE1jz7bNJ/eeS7PKRHPG8aH+Ga+qLM5rO8+8umYSH0gosJzmUY9IKICRBRwaDFUD4io8J4iREEgogJEFHBoA7MeEFFBvYa3OhBR4W1EhAZiTVQYoGo5NuSD6BYSliBUfKYq8BLxQQY0MeZ8DLIiWwn5yyVU9VlRRMgRauEvCV6vsVCRl65RoljDeGk8kdITKwubqvJ7zWWl7/lmeqKfEYZh1s+he6JounWrdm9xLDsvO/80LB9++jPrzUWfy4SwxWujfRYoW3CGj8Obg7RxZYOXhOj7/cyusZ4Re+ImyI31WiDvG/yvGY8ttYfnpU14GOgA85gGesQ0cD0yjsSf+H1jfbWj+ePZ1GfQZNP2NtUnJUmbbuA8jlPjzSM+02OTV6NiFgUFozPDnN6Zi1tFgXMHiIzTiNEoiNzpCg4AAAAAAAAA4IX5D2buTB+OtRlQAAAAAElFTkSuQmCC" alt="Delete"  style={{width: '100%', height: '100%'}}></img></button></td>
                 <td><button onClick={() => editRow(index)}>Edit</button></td>
               </React.Fragment>

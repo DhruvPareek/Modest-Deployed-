@@ -40,7 +40,6 @@ app.get('/getAllJobs', (request, response) => {
 app.patch('/updateJob', (request, response) => {
     const {id, name, startDate, endDate} = request.body
     const db = JobDBService.getDBServiceInstance();
-    // console.log("ID: " + id + " Name: " + name + " Start Date: " + startDate + " End Date: " + endDate);
     const result = db.updateJobByID(id, name, startDate, endDate);
     
     result
@@ -81,6 +80,17 @@ app.post('/loadItems', (request, response) => {
     .then(data => response.json({success : true}))
     .catch(err => console.log(err));
 });
+
+//read all items from database
+app.get('/getAllItems/:id', (request, response) => {
+    const { id } = request.params;
+    const db = ItemDBService.getDBServiceInstance();
+    const result = db.getAllItems(id);
+
+    result
+    .then(data => response.json({data: data}))
+    .catch(err => console.log(err));
+})
 
 /* ITEM MANAGEMENT ON JOBPAGE*/
 /* ITEM MANAGEMENT ON JOBPAGE*/

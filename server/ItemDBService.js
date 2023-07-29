@@ -18,6 +18,7 @@ connection.connect((err) => {
     } 
 });
 
+//Array of all the items needed for a single job
 const items = [
     {Item_Name: 'Line Producer', Section: 'A', Category: 7, EPA_Criteria: 'Fuel Consumed or Distance Traveled', CO2_Subtotal: 0, N2O_Subtotal: 0, CH4_Subtotal: 0},
     {Item_Name: 'Assistant Director', Section: 'A', Category: 7, EPA_Criteria: 'Fuel Consumed or Distance Traveled', CO2_Subtotal: 0, N2O_Subtotal: 0, CH4_Subtotal: 0},
@@ -51,7 +52,6 @@ class ItemDBService{
 
     //This adds all of the items from the items array to the database for a job
     async populateItemsForJob(jobID) {
-        console.log("jobID in itemDBService.js: " + jobID);
         try{
             jobID = parseInt(jobID, 10);
 
@@ -67,7 +67,6 @@ class ItemDBService{
                             console.log("Error:", err);
                             reject(new Error(err.message));
                         }
-                        console.log("Result:", result);
                         resolve(result.affectedRows);
                     })
                 });
@@ -78,6 +77,25 @@ class ItemDBService{
             return false;
         }
     }
+
+        //Returns all items from items list
+        async getAllItems(id) {
+            try {
+                const response = await new Promise((resolve, reject) => {
+                    const query = "SELECT * FROM Items_List WHERE Job_ID = ?";
+    
+                    connection.query(query, [id], (err, results) => {
+                       if(err) reject(new Error(err.message));
+                        resolve(results);
+                    })
+                });
+                return response;
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    
 }
 
 module.exports = ItemDBService;
