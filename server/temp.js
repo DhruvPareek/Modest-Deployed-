@@ -70,10 +70,10 @@ app.delete('/deleteJob/:id', (request, response) => {
 
 const ItemDBService = require('./ItemDBService');
 
+//This will send the JobID to the function in ItemDBService.js that will populate the items for that job
 app.post('/loadItems', (request, response) => {
     const {id} = request.body;
     const db = ItemDBService.getDBServiceInstance();
-    console.log("JobID in temp.js: " + id);
 
     const result = db.populateItemsForJob(id);
 

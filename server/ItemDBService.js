@@ -49,6 +49,7 @@ class ItemDBService{
         return instance ? instance : new ItemDBService();
     }
 
+    //This adds all of the items from the items array to the database for a job
     async populateItemsForJob(jobID) {
         console.log("jobID in itemDBService.js: " + jobID);
         try{

@@ -3,7 +3,7 @@ import "./app.css";
 import { Routes, Route, Link } from "react-router-dom";
 import JobPage from "./JobPage";
 import { useState, useEffect } from "react";
-import { handleJobEditClick } from './index.js';
+import { handleJobEditClick, addJob } from './index.js';
 
 //Title of dashboard and routes to different pages
 export default function App() {
@@ -75,7 +75,7 @@ function Dashboard() {
         <input type="text" id="StartDate-Input" value={startDate} onChange={e => setStartDate(e.target.value)} placeholder="MM-DD-YYYY"/>
         <label>End Date:  </label>
         <input type="text" id="EndDate-Input" value={endDate} onChange={e => setEndDate(e.target.value)} placeholder="MM-DD-YYYY"/>
-        <button className="AddJob" onClick={addRow} id="AddJob-btn" disabled={!jobName || !startDate || !endDate}>Add Job</button>
+        <button className="AddJob" onClick={() => {addRow();addJob();}} id="AddJob-btn" disabled={!jobName || !startDate || !endDate}>Add Job</button>
       </div>
 
       {/* Table of jobs */}
