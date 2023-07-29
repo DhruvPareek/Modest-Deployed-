@@ -72,8 +72,8 @@ function JobPage() {
             <thead>
                   <tr>
                     <th>Item</th>
+                    <th>Section</th>
                     <th>Category</th>
-                    <th>Scope</th>
                     <th>EPA Criteria</th>
                     <th colSpan="2">Data</th>
                     <th>CO2 Subtotal</th>
