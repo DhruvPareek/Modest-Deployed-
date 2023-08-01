@@ -2,13 +2,13 @@ import "./JobPage.css";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { loadItemsIntoJobPage } from './index.js';
+import { loadItemsIntoJobPage, handleItemEditClick} from './index.js';
 
 
 function JobPage() {
     const [items, setItems] = useState([]);
     const [newItem, setNewItem] = useState(false);
-    const [itemsLoaded, setItemsLoaded] = useState(false);
+    // const [itemsLoaded, setItemsLoaded] = useState(false);
 
     const [editingIndex, setEditingIndex] = useState(null);
     const { jobName,  jobID } = useParams();
@@ -50,7 +50,7 @@ function JobPage() {
             <span className="underline">{jobName}</span> {/* Use jobName as the title */}
         </div>
         <div className="button-container">
-            <button className="AddItem" onClick={() => {loadItemsIntoJobPage(jobID);setItemsLoaded(true);document.location.reload()}} disabled={itemsLoaded}>Load Items</button>
+            <button className="AddItem" onClick={() => {loadItemsIntoJobPage(jobID);document.location.reload()}} disabled={items.length!==0}>Load Items</button>
         </div>
         <table className="jobPageTable">
             <thead>
@@ -70,14 +70,15 @@ function JobPage() {
           <tr key={index}>
             {editingIndex === index ? (
               <React.Fragment>
-                <td>{item.Item_Name}</td>
+                {/* <td><input type="text" style={{width: '90px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onBlur={(e) => item.Item_Name = e.target.value} /></td> */}
+                <td><input type="text" style={{width: '90px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onChange={(e) => item.Item_Name = e.target.value} /></td>
                 <td>{item.Section}</td>
                 <td>{item.Category}</td>
                 <td>{item.EPA_Criteria}</td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={item.Data_1} onBlur={(e) => item.Data_1 = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={item.Data_2} onBlur={(e) => item.Data_2 = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} data-id={item.ID} id="update-data1-input" defaultValue={item.Data_1} onChange={(e) => item.Data_1 = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} id="update-data2-input" defaultValue={item.Data_2} onChange={(e) => item.Data_2 = e.target.value} /></td>
                 <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
-                <td><button className="UpdateItem-btn" onClick={() => saveItem(index, item)}>Save</button></td>
+                <td><button className="UpdateItem-btn" onClick={() => {saveItem(index, item);handleItemEditClick();}}>Save</button></td>
               </React.Fragment>
             ) : (
               <React.Fragment>

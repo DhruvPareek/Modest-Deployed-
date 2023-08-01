@@ -183,6 +183,30 @@ class ItemDBService{
         }
     }
 
+    //Sends query to database to update a job in the Jobs list table
+    async updateItemByID(id, name, data1, data2){
+        try {
+            id = parseInt(id, 10);
+            const response = await new Promise((resolve, reject) => {
+                const query = "UPDATE Items_List SET Item_Name = ?, Data_1 = ?, Data_2 = ?  WHERE id = ?";
+                connection.query(query, [name, data1, data2, id], (err, result) => {
+                    if(err) {
+                        console.log("Error:", err);
+                        reject(new Error(err.message));
+                    }
+                    console.log("Result:", result);
+                    resolve(result.affectedRows);
+                })
+            });
+
+            return response === 1 ? true : false;
+        } catch(error){
+            console.log(error);
+            return false;
+        }
+    }
+    
+
     //deletes an item from the Items list table in database
     // async deleteItemByID(id){
     //     try {
@@ -206,7 +230,31 @@ class ItemDBService{
     //         return false;
     //     }
     // }
+
+    //deletes an item from the Items list table in database
+    async deleteItemByJobID(Job_ID){
+        try {
+            Job_ID = parseInt(Job_ID, 10);
+            const response = await new Promise((resolve, reject) => {
+                const query = "DELETE FROM Items_List WHERE Job_ID = ?";
     
+                connection.query(query, [Job_ID], (err, result) => {
+                    if(err) {
+                        console.log("Error:", err);
+                        reject(new Error(err.message));
+                    }
+                    console.log("Result:", result);
+                    resolve(result.affectedRows);
+                })
+            });
+
+            return response === 1 ? true : false;
+        } catch(error){
+            console.log(error);
+            return false;
+        }
+    }
+
 }
 
 module.exports = ItemDBService;

@@ -3,7 +3,7 @@ import "./app.css";
 import { Routes, Route, Link } from "react-router-dom";
 import JobPage from "./JobPage";
 import { useState, useEffect } from "react";
-import { handleJobEditClick, addJob } from './index.js';
+import { handleJobEditClick, addJob, deleteItemByJobID, deleteJobById } from './index.js';
 
 //Title of dashboard and routes to different pages
 export default function App() {
@@ -47,6 +47,9 @@ function Dashboard() {
     }
 
     const delRow = (index) => {
+      const jobId = rows[index].ID;
+      deleteItemByJobID(jobId);
+      deleteJobById(jobId);
       const newRows = [...rows];
       newRows.splice(index, 1);
       setRows(newRows);

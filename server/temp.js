@@ -18,7 +18,6 @@ const JobDBService = require('./JobDBService');
 app.post('/insertJob', (request, response) => {
     const {name, startDate, endDate} = request.body;
     const db = JobDBService.getDBServiceInstance();
-
     const result = db.insertNewJob(name, startDate, endDate);
 
     result
@@ -36,7 +35,7 @@ app.get('/getAllJobs', (request, response) => {
     .catch(err => console.log(err));
 })
 
-//update a jb in the database, it can update name, startDate, endDate
+//update a job in the database, it can update name, startDate, endDate
 app.patch('/updateJob', (request, response) => {
     const {id, name, startDate, endDate} = request.body
     const db = JobDBService.getDBServiceInstance();
@@ -51,7 +50,7 @@ app.patch('/updateJob', (request, response) => {
 app.delete('/deleteJob/:id', (request, response) => {
      const { id } = request.params;
      const db = JobDBService.getDBServiceInstance();
-
+    // console.log(id);
     const result = db.deleteJobByID(id);
     
     result
@@ -92,17 +91,28 @@ app.get('/getAllItems/:id', (request, response) => {
     .catch(err => console.log(err));
 })
 
-//delete a job from the database
-// app.delete('/deleteItem/:id', (request, response) => {
-//     const { id } = request.params;
-//     const db = ItemDBService.getDBServiceInstance();
+//update an item in the database, it can update data fields
+app.patch('/updateItem', (request, response) => {
+    const {id, name, data1, data2} = request.body
+    const db = ItemDBService.getDBServiceInstance();
+    const result = db.updateItemByID(id, name, data1, data2);
+    
+    result
+    .then(data => response.json({success : data}))
+    .catch(err => console.log(err));
+});
 
-//    const result = db.deleteItemByID(id);
+//delete a job from the database
+app.delete('/deleteItem/:Job_ID', (request, response) => {
+    const { Job_ID } = request.params;
+    const db = ItemDBService.getDBServiceInstance();
+
+   const result = db.deleteItemByJobID(Job_ID);
    
-//    result
-//    .then(data => response.json({success : data}))
-//    .catch(err => console.log(err));
-// });
+   result
+   .then(data => response.json({success : data}))
+   .catch(err => console.log(err));
+});
 
 /* ITEM MANAGEMENT ON JOBPAGE*/
 /* ITEM MANAGEMENT ON JOBPAGE*/

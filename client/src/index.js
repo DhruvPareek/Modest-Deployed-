@@ -12,7 +12,7 @@ root.render(
   </BrowserRouter>
 );
 
-//This converts all of the dates into correct format for a SQL query, then sends that stuff to /update
+//This converts all of the dates into correct format for a SQL query, then sends that stuff to /updateJob
 export function handleJobEditClick(){
   var name = document.querySelector('#update-name-input');
   name.value = name.value.replace(/[^a-zA-Z0-9-,@:&$() ]/g, '');
@@ -56,30 +56,20 @@ export function loadItemsIntoJobPage(jobID){
 
 }
 
-/*This waits until the page is loaded before running the code that listens
-for someone adding a job, deleting a job, or editing a job*/
-document.addEventListener('DOMContentLoaded', (event) => {
-  /* LISTENING FOR DELETING AND EDITING JOBS */
-  document.querySelector('table tbody').addEventListener('click', function(event) {
-    if (event.target.className === "deleteJob-btn") {
-        deleteJobById(event.target.dataset.id);
-    }
-  });
-
-  /* DELETE A JOB */
-  function deleteJobById(id){
-    fetch('http://localhost:5000/deleteJob/' + id, { 
-        method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(data => console.log(data));
-  }
-});
+/* DELETE A JOB */
+export function deleteJobById(id){
+  fetch('http://localhost:5000/deleteJob/' + id, { 
+      method: 'DELETE'
+  })
+  .then(response => response.json())
+  .then(data => console.log(data));
+}
 
   /* This function reads from the text input boxes for Job Name,
   Start Date, and End Date , then calls the insert code in the temp.js file
   in the server directory to add this new Job to database when 'Add Job' is clicked*/
 export function addJob () {
+  console.log('addJob called');
   const nameInput = document.querySelector('#Job-Name-Input');
   var name = nameInput.value;
   name = name.replace(/[^a-zA-Z0-9-,@:&$() ]/g, '');
@@ -112,24 +102,30 @@ export function addJob () {
   .then(response => response.json());
 }  
 
-// document.addEventListener('DOMContentLoaded', (event) => {
-//   /* LISTENING FOR DELETING AND EDITING JOBS */
-//   document.querySelector('table tbody').addEventListener('click', function(event) {
-//     if (event.target.className === "deleteItem-btn") {
-//       console.log("Inside deleteItem-btn: " + event.target.dataset.id);
-//       deleteItemById(event.target.dataset.id);
-//     }
-//   });
+/* DELETE AN ITEM by its Job_ID */
+export function deleteItemByJobID(Job_ID){
+  fetch('http://localhost:5000/deleteItem/' + Job_ID, { 
+      method: 'DELETE'
+  })
+  .then(response => response.json())
+  .then(data => console.log(data));
+}
 
-//     /* DELETE A JOB */
-//     function deleteItemById(id){
-//       fetch('http://localhost:5000/deleteItem/' + id, { 
-//           method: 'DELETE'
-//       })
-//       .then(response => response.json())
-//       .then(data => console.log(data));
-//     }
-// });
+//This function retrieves changes to an item and sends them to /updateItem
+export function handleItemEditClick(){
+  var name = document.querySelector('#update-itemName-input');
+  var data1 = document.querySelector('#update-data1-input');
+  var data2 = document.querySelector('#update-data2-input');
+
+  fetch('http://localhost:5000/updateItem', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ id: data1.dataset.id, name:name.value, data1: data1.value, data2: data2.value})
+  })
+  .then(response => response.json());
+}
 
 //This waits until the page is loaded before running the code that retrieves all items from MySQL table
 document.addEventListener("DOMContentLoaded", function () {
