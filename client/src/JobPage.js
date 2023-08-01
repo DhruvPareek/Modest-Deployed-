@@ -6,12 +6,11 @@ import { loadItemsIntoJobPage } from './index.js';
 
 
 function JobPage() {
-    const [rows, setRows] = useState([]);
     const [items, setItems] = useState([]);
     const [newItem, setNewItem] = useState(false);
+    const [itemsLoaded, setItemsLoaded] = useState(false);
 
     const [editingIndex, setEditingIndex] = useState(null);
-    const [jobType, setJobType] = useState('Producer');
     const { jobName,  jobID } = useParams();
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
@@ -22,48 +21,23 @@ function JobPage() {
           setItems(data.data);
         });
     }, [newItem]);
-
-    const jobData = {
-        'Producer': {
-            item: "Producer",
-            category: "a",
-            scope: "6",
-            criteria: "ferd",
-            data: {value: "ched", err: "err"},
-            subCO2: "111", subN2O: "222", subCH4: "333"
-        },
-        'Actor': {
-            item: "Actor",
-            category: "juan",
-            scope: "5",
-            criteria: "jeef",
-            data: "geeg",
-            subCO2: "444", subN2O: "555", subCH4: "666"
-        }
-    };
-
-    const addRow = () => {
-        setRows([...rows, jobData[jobType]]);
-        setNewItem(!newItem);
-        document.location.reload();
-    }
   
-      const delRow = (index) => {
-        const newRows = [...rows];
-        newRows.splice(index, 1);
-        setRows(newRows);
-      }
+      // const delItems = (index) => {
+      //   const newItems = [...items];
+      //   newItems.splice(index, 1);
+      //   setItems(newItems);
+      // }
   
-      const editRow = (index) => {
+      const editItem = (index) => {
         setEditingIndex(index);
       }
   
-      // const saveRow = (index, updatedRow) => {
-      //   const newRows = [...rows];
-      //   newRows[index] = updatedRow;
-      //   setRows(newRows);
-      //   setEditingIndex(null);
-      // }
+      const saveItem = (index, updatedItem) => {
+        const newItems = [...items];
+        newItems[index] = updatedItem;
+        setItems(newItems);
+        setEditingIndex(null);
+      }
 
     return (
         <section>
@@ -76,11 +50,7 @@ function JobPage() {
             <span className="underline">{jobName}</span> {/* Use jobName as the title */}
         </div>
         <div className="button-container">
-            <select value={jobType} onChange={e => setJobType(e.target.value)}>
-                <option value="Producer">Producer</option>
-                <option value="Actor">Actor</option>
-            </select>
-            <button className="AddItem" onClick={() => {addRow();loadItemsIntoJobPage(jobID);}}>Add Item</button>
+            <button className="AddItem" onClick={() => {loadItemsIntoJobPage(jobID);setItemsLoaded(true);document.location.reload()}} disabled={itemsLoaded}>Load Items</button>
         </div>
         <table className="jobPageTable">
             <thead>
@@ -100,24 +70,26 @@ function JobPage() {
           <tr key={index}>
             {editingIndex === index ? (
               <React.Fragment>
-                <td><input type="text" style={{width: '90px'}} defaultValue={item.Item_Name} onBlur={(e) => item.Item_Name = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={item.Section} onBlur={(e) => item.Section = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={item.Category} onBlur={(e) => item.Category = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} defaultValue={item.EPA_Category} onBlur={(e) => item.EPA_Category = e.target.value} /></td>
+                <td>{item.Item_Name}</td>
+                <td>{item.Section}</td>
+                <td>{item.Category}</td>
+                <td>{item.EPA_Criteria}</td>
                 <td><input type="text" style={{width: '90px'}} defaultValue={item.Data_1} onBlur={(e) => item.Data_1 = e.target.value} /></td>
+                <td><input type="text" style={{width: '90px'}} defaultValue={item.Data_2} onBlur={(e) => item.Data_2 = e.target.value} /></td>
                 <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
-                {/* <td><button onClick={() => saveRow(index, row)}>Save</button></td> */}
+                <td><button className="UpdateItem-btn" onClick={() => saveItem(index, item)}>Save</button></td>
               </React.Fragment>
             ) : (
               <React.Fragment>
                 <td>{item.Item_Name}</td>
                 <td>{item.Section}</td>
                 <td>{item.Category}</td>
-                <td>{item.EPA_Category}</td>
+                <td>{item.EPA_Criteria}</td>
                 <td>{item.Data_1}</td>
+                <td>{item.Data_2}</td>
                 <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
-                <td><button onClick={() => delRow(index)} style={{padding: '0', border: 'none', width: '30px', height: '30px'}}><img src= "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAeFBMVEX///8AAADHx8e7u7u/v7/Ly8uzs7PDw8NnZ2dbW1sjIyMXFxfT09O3t7fOzs7S0tLo6Oji4uJFRUWYmJirq6sICAj09PRMTEw2NjYuLi4cHBynp6dUVFSLi4t+fn7a2to+Pj57e3sQEBCGhoaamppxcXHw8PBlZWXb7nSSAAAD4UlEQVR4nO2d23qqMBBG8UhtQUXEI2qrtvv933ALEUjUqCEZEv3+dQvpZIkHOgkzngcAAAAAAAAAAJhl7HeU8ce2Z33FcNKqxWRke+Yi66SeR6uV9G3PnadXVyMz2dmePUfN9xUjtT37irGORyuZ2Z5/ia8l0hrann9JV0+kbXv+JRCBCBEQcVok9p9g8wIi/jMjQoiQAhGIEAERiBABEYjUYzZ8kGcT7pw2z2TmDiojDKW+Ztt9yzKrowmPb9saGb/6Ih+2HRja+ci/2rlQsyx1Rfq2DQp0E6uxbYGCqabI2rZAwVpTZGdboKCrKeItbBsw9tqZ7o5tBcZB18PzDo+j0GNkDWX6aVvjKzbhcSJq26Tn0tocAAAAAAAp467/Rx6jQx4jyDc0paS3cb08kzaIKGOE5+RQEtLFmJ5j7AlTwrsyyZUEVDGCMsYX3c7NQfW/zpwqxryK8UEVY8ZnHYk+jfxmvD1NiIstmETvYGGpheo7RQiinWe6jZCi7dHEgIgKEFEBIgo0L3JvFXoWp4vJ9sbNUrSdLNL4Xj7aKRF/lZ+RXCU6Y/aLurrzG+SSSLu8AbhYVS6X4xP5JnKXRKqcdyK8u7g1I/nSpkMiU+6kH/4Av9DdkY12SOSXO+mbP7CUGfI4JMLd67c++QNf3AHpHTpEVIAIAyLGEUSkv84QyYGIChBhQMQ4EGFAxDjdp4JAJAciKkCEARHjvKeINMcGkRyIqAARBkSMI4hIn6mDSA5EVIAIAyLGeU8R6RY6iORARAWIMCBiHIgwIGIciDAgYhyIMCBiHIgwXk3khzvpmz/A1/NwaE+jVKQjmy9v6NAuU/nTYtVu0r3wuFdUPdm0kA52SSQoCotd1rY/FmNX8mcMXRLxAlZbbHE1jz7bNJ/eeS7PKRHPG8aH+Ga+qLM5rO8+8umYSH0gosJzmUY9IKICRBRwaDFUD4io8J4iREEgogJEFHBoA7MeEFFBvYa3OhBR4W1EhAZiTVQYoGo5NuSD6BYSliBUfKYq8BLxQQY0MeZ8DLIiWwn5yyVU9VlRRMgRauEvCV6vsVCRl65RoljDeGk8kdITKwubqvJ7zWWl7/lmeqKfEYZh1s+he6JounWrdm9xLDsvO/80LB9++jPrzUWfy4SwxWujfRYoW3CGj8Obg7RxZYOXhOj7/cyusZ4Re+ImyI31WiDvG/yvGY8ttYfnpU14GOgA85gGesQ0cD0yjsSf+H1jfbWj+ePZ1GfQZNP2NtUnJUmbbuA8jlPjzSM+02OTV6NiFgUFozPDnN6Zi1tFgXMHiIzTiNEoiNzpCg4AAAAAAAAA4IX5D2buTB+OtRlQAAAAAElFTkSuQmCC" alt="Delete"  style={{width: '100%', height: '100%'}}></img></button></td>
-                <td><button onClick={() => editRow(index)}>Edit</button></td>
+                {/* <td><button className="deleteItem-btn" onClick={() => delItems(index)} data-id={item.ID} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td> */}
+                <td><button className="editItem-btn" onClick={() => editItem(index)} data-id={item.ID} >Edit</button></td>
               </React.Fragment>
             )}
           </tr>

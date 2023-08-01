@@ -92,6 +92,18 @@ app.get('/getAllItems/:id', (request, response) => {
     .catch(err => console.log(err));
 })
 
+//delete a job from the database
+// app.delete('/deleteItem/:id', (request, response) => {
+//     const { id } = request.params;
+//     const db = ItemDBService.getDBServiceInstance();
+
+//    const result = db.deleteItemByID(id);
+   
+//    result
+//    .then(data => response.json({success : data}))
+//    .catch(err => console.log(err));
+// });
+
 /* ITEM MANAGEMENT ON JOBPAGE*/
 /* ITEM MANAGEMENT ON JOBPAGE*/
 /* ITEM MANAGEMENT ON JOBPAGE*/

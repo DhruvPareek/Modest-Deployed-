@@ -59,8 +59,9 @@ function Dashboard() {
   
   //This just changes the job that was being edited back to a regular row in the table
   const saveRow = () => {
-      setEditingIndex(null);
+    setEditingIndex(null);
   }
+
     return (
       <section>
       <div className="header">
@@ -108,8 +109,8 @@ function Dashboard() {
                 <td>{row.CH4Emissions}</td>
                 <td>{row.N2OEmissions}</td>
                 <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
-                <td><button class="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
-                <td><button class="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleJobEditClick();}}>Save</button></td>
+                <td><button className="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
+                <td><button className="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleJobEditClick();}}>Save</button></td>
                 {/* The save button calls the handleEditClick function to send query to databse to update */}
             </React.Fragment>
           ) : (
@@ -121,8 +122,8 @@ function Dashboard() {
                 <td>{row.CH4Emissions}</td>
                 <td>{row.N2OEmissions}</td>
                 <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
-                <td><button class="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td>
-                <td><button class="editJob-btn" data-id={row.ID} onClick={() => editRow(index)}>Edit</button></td>
+                <td><button className="deleteJob-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td>
+                <td><button className="editJob-btn" data-id={row.ID} onClick={() => editRow(index)}>Edit</button></td>
             </React.Fragment>
         )}
       </tr>

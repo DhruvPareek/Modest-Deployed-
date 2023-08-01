@@ -61,12 +61,9 @@ for someone adding a job, deleting a job, or editing a job*/
 document.addEventListener('DOMContentLoaded', (event) => {
   /* LISTENING FOR DELETING AND EDITING JOBS */
   document.querySelector('table tbody').addEventListener('click', function(event) {
-    if (event.target.className === "delete-btn") {
+    if (event.target.className === "deleteJob-btn") {
         deleteJobById(event.target.dataset.id);
     }
-    if (event.target.className === "edit-btn") {
-        // handleEditRow(event.target.dataset.id);
-    }  
   });
 
   /* DELETE A JOB */
@@ -115,10 +112,27 @@ export function addJob () {
   .then(response => response.json());
 }  
 
+// document.addEventListener('DOMContentLoaded', (event) => {
+//   /* LISTENING FOR DELETING AND EDITING JOBS */
+//   document.querySelector('table tbody').addEventListener('click', function(event) {
+//     if (event.target.className === "deleteItem-btn") {
+//       console.log("Inside deleteItem-btn: " + event.target.dataset.id);
+//       deleteItemById(event.target.dataset.id);
+//     }
+//   });
+
+//     /* DELETE A JOB */
+//     function deleteItemById(id){
+//       fetch('http://localhost:5000/deleteItem/' + id, { 
+//           method: 'DELETE'
+//       })
+//       .then(response => response.json())
+//       .then(data => console.log(data));
+//     }
+// });
 
 //This waits until the page is loaded before running the code that retrieves all items from MySQL table
 document.addEventListener("DOMContentLoaded", function () {
   fetch('http://localhost:5000/getAllJobs')
   .then(response => response.json());
-  // .then(data => console.log(data));
 });
