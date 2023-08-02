@@ -10,8 +10,13 @@
 .jobPageTable td,.jobPageTable th {
     border: 1px solid #dddddd;
     text-align: center;
-    padding: 15px;
+    padding: 5px 10px;
     border-radius: 20px;
+}
+
+.jobPageTable {
+    border-collapse: separate; /* Control spacing between cells */
+    /* border-spacing: 0 20px; Horizontal and vertical spacing */
 }
 
 /* Button to add item */
@@ -21,3 +26,10 @@
     padding: 10px;
     margin: 20px 20px;
 }
+
+.data-type {
+    text-decoration: underline; /* Add underline */
+    display: block; /* Make it a block element so that it takes the full width */
+    font-size: 18px;
+  }
+  

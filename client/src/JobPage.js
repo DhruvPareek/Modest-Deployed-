@@ -7,7 +7,6 @@ import { loadItemsIntoJobPage, handleItemEditClick} from './index.js';
 
 function JobPage() {
     const [items, setItems] = useState([]);
-    const [newItem, setNewItem] = useState(false);
     // const [itemsLoaded, setItemsLoaded] = useState(false);
 
     const [editingIndex, setEditingIndex] = useState(null);
@@ -64,13 +63,12 @@ function JobPage() {
           <tr key={index}>
             {editingIndex === index ? (
               <React.Fragment>
-                {/* <td><input type="text" style={{width: '90px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onBlur={(e) => item.Item_Name = e.target.value} /></td> */}
                 <td><input type="text" style={{width: '180px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onChange={(e) => item.Item_Name = e.target.value} /></td>
                 <td>{item.Section}</td>
                 <td>{item.Category}</td>
                 <td>{item.EPA_Criteria}</td>
-                <td><input type="text" style={{width: '90px'}} data-id={item.ID} id="update-data1-input" defaultValue={item.Data_1} onChange={(e) => item.Data_1 = e.target.value} /></td>
-                <td><input type="text" style={{width: '90px'}} id="update-data2-input" defaultValue={item.Data_2} onChange={(e) => item.Data_2 = e.target.value} /></td>
+                <td><span className="data-type">{item.Data_1_Type}</span><input type="text" style={{width: '90px'}} data-id={item.ID} id="update-data1-input" defaultValue={item.Data_1} onChange={(e) => item.Data_1 = e.target.value} /></td>
+                <td><span className="data-type">{item.Data_2_Type}</span><input type="text" style={{width: '90px'}} id="update-data2-input" defaultValue={item.Data_2} onChange={(e) => item.Data_2 = e.target.value} /></td>
                 <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
                 <td><button className="UpdateItem-btn" onClick={() => {saveItem(index, item);handleItemEditClick();}}>Save</button></td>
               </React.Fragment>
@@ -80,10 +78,9 @@ function JobPage() {
                 <td>{item.Section}</td>
                 <td>{item.Category}</td>
                 <td>{item.EPA_Criteria}</td>
-                <td>{item.Data_1}</td>
-                <td>{item.Data_2}</td>
+                <td><span className="data-type">{item.Data_1_Type}</span><br />{item.Data_1 === null ? 'Empty' : item.Data_1}</td>
+                <td><span className="data-type">{item.Data_2_Type}</span><br />{item.Data_2 === null ? 'Empty' : item.Data_2}</td>
                 <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
-                {/* <td><button className="deleteItem-btn" onClick={() => delItems(index)} data-id={item.ID} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td> */}
                 <td><button className="editItem-btn" onClick={() => editItem(index)} data-id={item.ID} >Edit</button></td>
               </React.Fragment>
             )}
