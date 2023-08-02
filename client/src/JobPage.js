@@ -20,24 +20,18 @@ function JobPage() {
         .then(data => {
           setItems(data.data);
         });
-    }, [newItem]);
+    }, []);
   
-      // const delItems = (index) => {
-      //   const newItems = [...items];
-      //   newItems.splice(index, 1);
-      //   setItems(newItems);
-      // }
+    const editItem = (index) => {
+      setEditingIndex(index);
+    }
   
-      const editItem = (index) => {
-        setEditingIndex(index);
-      }
-  
-      const saveItem = (index, updatedItem) => {
-        const newItems = [...items];
-        newItems[index] = updatedItem;
-        setItems(newItems);
-        setEditingIndex(null);
-      }
+    const saveItem = (index, updatedItem) => {
+      const newItems = [...items];
+      newItems[index] = updatedItem;
+      setItems(newItems);
+      setEditingIndex(null);
+    }
 
     return (
         <section>
@@ -71,7 +65,7 @@ function JobPage() {
             {editingIndex === index ? (
               <React.Fragment>
                 {/* <td><input type="text" style={{width: '90px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onBlur={(e) => item.Item_Name = e.target.value} /></td> */}
-                <td><input type="text" style={{width: '90px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onChange={(e) => item.Item_Name = e.target.value} /></td>
+                <td><input type="text" style={{width: '180px'}} data-id={item.Item_Name} id="update-itemName-input" defaultValue={item.Item_Name} onChange={(e) => item.Item_Name = e.target.value} /></td>
                 <td>{item.Section}</td>
                 <td>{item.Category}</td>
                 <td>{item.EPA_Criteria}</td>

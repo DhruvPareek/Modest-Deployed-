@@ -65,9 +65,9 @@ export function deleteJobById(id){
   .then(data => console.log(data));
 }
 
-  /* This function reads from the text input boxes for Job Name,
-  Start Date, and End Date , then calls the insert code in the temp.js file
-  in the server directory to add this new Job to database when 'Add Job' is clicked*/
+/* This function reads from the text input boxes for Job Name,
+Start Date, and End Date , then calls the insert code in the temp.js file
+in the server directory to add this new Job to database when 'Add Job' is clicked*/
 export function addJob () {
   console.log('addJob called');
   const nameInput = document.querySelector('#Job-Name-Input');
