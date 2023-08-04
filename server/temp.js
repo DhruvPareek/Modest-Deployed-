@@ -46,11 +46,21 @@ app.patch('/updateJob', (request, response) => {
     .catch(err => console.log(err));
 });
 
+//update a job in the database, it can update name, startDate, endDate
+// app.patch('/updateEmissionsTotals/:id', (request, response) => {
+//     const { id } = request.params;
+//     const db = JobDBService.getDBServiceInstance();
+//     const result = db.updateJobEmissionTotals(id);
+    
+//     result
+//     .then(data => response.json({success : data}))
+//     .catch(err => console.log(err));
+// });
+
 //delete a job from the database
 app.delete('/deleteJob/:id', (request, response) => {
      const { id } = request.params;
      const db = JobDBService.getDBServiceInstance();
-    // console.log(id);
     const result = db.deleteJobByID(id);
     
     result
@@ -112,6 +122,17 @@ app.delete('/deleteItem/:Job_ID', (request, response) => {
    result
    .then(data => response.json({success : data}))
    .catch(err => console.log(err));
+});
+
+//update an item in the database, it can update data fields
+app.patch('/updateItemSubtotals', (request, response) => {
+    const {id, CO2subtotal, N2Osubtotal, CH4subtotal} = request.body
+    const db = ItemDBService.getDBServiceInstance();
+    const result = db.updateItemSubtotals(id, CO2subtotal, N2Osubtotal, CH4subtotal);
+    
+    result
+    .then(data => response.json({success : data}))
+    .catch(err => console.log(err));
 });
 
 /* ITEM MANAGEMENT ON JOBPAGE*/

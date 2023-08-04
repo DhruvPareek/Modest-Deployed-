@@ -108,9 +108,9 @@ function Dashboard() {
                     {' to '}
                     <input type="text" id="update-endDate-input" defaultValue={new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')} />
                 </td>
-                <td>{row.CO2Emissions}</td>
-                <td>{row.CH4Emissions}</td>
-                <td>{row.N2OEmissions}</td>
+                <td>{row.CO2Emissions + "kg"}</td>
+                <td>{row.CH4Emissions + "kg"}</td>
+                <td>{row.N2OEmissions + "kg"}</td>
                 <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
                 <td><button className="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
                 <td><button className="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleJobEditClick();}}>Save</button></td>
@@ -121,9 +121,9 @@ function Dashboard() {
                 {/* <td>{row.ID}</td> */}
                 <td><Link to={`/job/${row.Name}/${row.ID}`}>{row.Name}</Link></td>
                 <td>{new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}{' to '}{new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
-                <td>{row.CO2Emissions}</td>
-                <td>{row.CH4Emissions}</td>
-                <td>{row.N2OEmissions}</td>
+                <td>{row.CO2Emissions + "kg"}</td>
+                <td>{row.CH4Emissions + "kg"}</td>
+                <td>{row.N2OEmissions + "kg"}</td>
                 <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
                 <td><button className="deleteJob-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td>
                 <td><button className="editJob-btn" data-id={row.ID} onClick={() => editRow(index)}>Edit</button></td>

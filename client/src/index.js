@@ -61,15 +61,13 @@ export function deleteJobById(id){
   fetch('http://localhost:5000/deleteJob/' + id, { 
       method: 'DELETE'
   })
-  .then(response => response.json())
-  .then(data => console.log(data));
+  .then(response => response.json());
 }
 
 /* This function reads from the text input boxes for Job Name,
 Start Date, and End Date , then calls the insert code in the temp.js file
 in the server directory to add this new Job to database when 'Add Job' is clicked*/
 export function addJob () {
-  console.log('addJob called');
   const nameInput = document.querySelector('#Job-Name-Input');
   var name = nameInput.value;
   name = name.replace(/[^a-zA-Z0-9-,@:&$() ]/g, '');
@@ -107,8 +105,7 @@ export function deleteItemByJobID(Job_ID){
   fetch('http://localhost:5000/deleteItem/' + Job_ID, { 
       method: 'DELETE'
   })
-  .then(response => response.json())
-  .then(data => console.log(data));
+  .then(response => response.json());
 }
 
 //This function retrieves changes to an item and sends them to /updateItem
@@ -126,6 +123,29 @@ export function handleItemEditClick(){
   })
   .then(response => response.json());
 }
+
+//This updates emissions subtotals for an item
+export function updateItemSubtotals(CO2subtotal, N2Osubtotal, CH4subtotal, id, jobID){
+  fetch('http://localhost:5000/updateItemSubtotals', {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({id: id, CO2subtotal: CO2subtotal, N2Osubtotal: N2Osubtotal, CH4subtotal: CH4subtotal})
+  })
+  .then(response => response.json())
+  .catch(err => console.log(err));
+}
+
+/*This function updates the emission totals for a job this gets
+called after an item from that job gets its subtotals updated*/
+// export function updateJobEmissionTotals(jobID){
+//   fetch('http://localhost:5000/updateEmissionsTotals/' + jobID, {
+//     method: 'PATCH'
+//   })
+//   .then(response => response.json())
+//   .catch(err => console.log(err));
+// }
 
 //This waits until the page is loaded before running the code that retrieves all items from MySQL table
 document.addEventListener("DOMContentLoaded", function () {

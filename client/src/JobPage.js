@@ -2,15 +2,62 @@ import "./JobPage.css";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { loadItemsIntoJobPage, handleItemEditClick} from './index.js';
+import { loadItemsIntoJobPage, handleItemEditClick, updateItemSubtotals} from './index.js';
 
+/*Calculates subtotals for type 1 data which is driving mileage
+for days worked and distance traveled*/
+const calculateSubtotalsType1 = (data1, data2) => {
+  const totalMileage = data1 * data2;
+  const CO2_Subtotal = totalMileage * 0.332;
+  const N2O_Subtotal = totalMileage * 0.007;
+  const CH4_Subtotal = totalMileage * 0.007;
+  return {
+    CO2_Subtotal: CO2_Subtotal,
+    N2O_Subtotal: N2O_Subtotal,
+    CH4_Subtotal: CH4_Subtotal,
+  };
+};
+
+/*Calculates subtotals for type 2 data which is only driving mileage*/
+const calculateSubtotalsType2 = (data1) => {
+  const CO2_Subtotal = data1 * 0.332;
+  const N2O_Subtotal = data1 * 0.007;
+  const CH4_Subtotal = data1 * 0.007;
+  return {
+    CO2_Subtotal: CO2_Subtotal,
+    N2O_Subtotal: N2O_Subtotal,
+    CH4_Subtotal: CH4_Subtotal,
+  };
+};
+
+// Function to update the subtotals based on item properties
+const updateSubtotals = (item, jobID) => {
+  if(item.Data_1 > 0 && item.Data_2 > 0){
+    if((item.Data_1_Type === 'Days Worked' || item.Data_1_Type === 'Days Worked @ Location') && item.Data_2_Type === 'Distance Traveled (miles)'){
+      const subtotals = calculateSubtotalsType1(item.Data_1, item.Data_2);
+      item.CO2_Subtotal = subtotals.CO2_Subtotal;
+      item.N2O_Subtotal = subtotals.N2O_Subtotal;
+      item.CH4_Subtotal = subtotals.CH4_Subtotal;
+      updateItemSubtotals(subtotals.CO2_Subtotal, subtotals.N2O_Subtotal, subtotals.CH4_Subtotal, item.ID, jobID);
+      // updateJobEmissionTotals(jobID);
+    }
+  }else if(item.Data_1 > 0 && item.Data_2 === null){
+    if((item.Data_1_Type === 'Car Mileage' || item.Data_1_Type === 'Mileage') && item.Data_2_Type === null){
+      const subtotals = calculateSubtotalsType2(item.Data_1);
+      item.CO2_Subtotal = subtotals.CO2_Subtotal;
+      item.N2O_Subtotal = subtotals.N2O_Subtotal;
+      item.CH4_Subtotal = subtotals.CH4_Subtotal;
+      updateItemSubtotals(subtotals.CO2_Subtotal, subtotals.N2O_Subtotal, subtotals.CH4_Subtotal, item.ID);
+      // updateJobEmissionTotals(jobID);
+    }
+  }
+};
 
 function JobPage() {
-    const [items, setItems] = useState([]);
-    // const [itemsLoaded, setItemsLoaded] = useState(false);
+  const [items, setItems] = useState([]);
+  const {jobName, jobID} = useParams();
 
-    const [editingIndex, setEditingIndex] = useState(null);
-    const { jobName,  jobID } = useParams();
+  const [editingIndex, setEditingIndex] = useState(null);
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
@@ -47,16 +94,16 @@ function JobPage() {
         </div>
         <table className="jobPageTable">
             <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>Section</th>
-                    <th>Category</th>
-                    <th>EPA Criteria</th>
-                    <th colSpan="2">Data</th>
-                    <th>CO2 Subtotal</th>
-                    <th>N2O Subtotal</th>
-                    <th>CH4 Subtotal</th>
-                  </tr>
+              <tr>
+                <th>Item</th>
+                <th>Section</th>
+                <th>Category</th>
+                <th>EPA Criteria</th>
+                <th colSpan="2">Data</th>
+                <th>CO2 Subtotal</th>
+                <th>N2O Subtotal</th>
+                <th>CH4 Subtotal</th>
+              </tr>
             </thead>
             <tbody>
             {items.map((item, index) => (
@@ -80,7 +127,8 @@ function JobPage() {
                 <td>{item.EPA_Criteria}</td>
                 <td><span className="data-type">{item.Data_1_Type}</span><br />{item.Data_1 === null ? 'Empty' : item.Data_1}</td>
                 <td><span className="data-type">{item.Data_2_Type}</span><br />{item.Data_2 === null ? 'Empty' : item.Data_2}</td>
-                <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
+                {updateSubtotals(item, jobID)}
+                <td>{item.CO2_Subtotal.toFixed(4) + "kg"}</td><td>{item.N2O_Subtotal.toFixed(4) + "kg"}</td><td>{item.CH4_Subtotal.toFixed(4) + "kg"}</td>
                 <td><button className="editItem-btn" onClick={() => editItem(index)} data-id={item.ID} >Edit</button></td>
               </React.Fragment>
             )}

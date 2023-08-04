@@ -374,7 +374,6 @@ class ItemDBService{
                         console.log("Error:", err);
                         reject(new Error(err.message));
                     }
-                    console.log("Result:", result);
                     resolve(result.affectedRows);
                 })
             });
@@ -398,7 +397,6 @@ class ItemDBService{
                         console.log("Error:", err);
                         reject(new Error(err.message));
                     }
-                    console.log("Result:", result);
                     resolve(result.affectedRows);
                 })
             });
@@ -410,6 +408,33 @@ class ItemDBService{
         }
     }
 
+        //Sends query to database to update a job in the Jobs list table
+        async updateItemSubtotals(id, CO2subtotal, N2Osubtotal, CH4subtotal){
+            try {
+                id = parseInt(id, 10);
+    
+                const response = await new Promise((resolve, reject) => {
+                    const query = "UPDATE Items_List SET CO2_Subtotal = ?, N2O_Subtotal = ?, CH4_Subtotal = ?  WHERE id = ?";
+                    connection.query(query, [CO2subtotal, N2Osubtotal, CH4subtotal, id], (err, result) => {
+                        if(err) {
+                            console.log("Error:", err);
+                            reject(new Error(err.message));
+                        }
+                        resolve(result.affectedRows);
+                    })
+                });
+    
+                return response === 1 ? true : false;
+            } catch(error){
+                console.log(error);
+                return false;
+            }
+        }
+
+        /* This sums up all of the emissions subtotals for a job, then sets the */
+        async updateJobEmissionTotals(id){
+
+        }
 }
 
 module.exports = ItemDBService;

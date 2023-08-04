@@ -91,28 +91,28 @@ class JobDBService{
         }
     }
 
-    //Sends query to database to update a job in the Jobs list table
-    async updateJobByID(id, name, startDate, endDate){
-        try {
-            id = parseInt(id, 10);
-            const response = await new Promise((resolve, reject) => {
-                const query = "UPDATE Jobs_List SET Name = ?, Start_Date = STR_TO_DATE(?, '%Y-%m-%d'), End_Date = STR_TO_DATE(?, '%Y-%m-%d') WHERE id = ?";
-                connection.query(query, [name, startDate, endDate, id], (err, result) => {
-                    if(err) {
-                        console.log("Error:", err);
-                        reject(new Error(err.message));
-                    }
-                    console.log("Result:", result);
-                    resolve(result.affectedRows);
-                })
-            });
+    // //Sends query to database to update a job in the Jobs list table
+    // async updateJobByID(id, name, startDate, endDate){
+    //     try {
+    //         id = parseInt(id, 10);
+    //         const response = await new Promise((resolve, reject) => {
+    //             const query = "UPDATE Jobs_List SET Name = ?, Start_Date = STR_TO_DATE(?, '%Y-%m-%d'), End_Date = STR_TO_DATE(?, '%Y-%m-%d') WHERE id = ?";
+    //             connection.query(query, [name, startDate, endDate, id], (err, result) => {
+    //                 if(err) {
+    //                     console.log("Error:", err);
+    //                     reject(new Error(err.message));
+    //                 }
+    //                 console.log("Result:", result);
+    //                 resolve(result.affectedRows);
+    //             })
+    //         });
 
-            return response === 1 ? true : false;
-        } catch(error){
-            console.log(error);
-            return false;
-        }
-    }
+    //         return response === 1 ? true : false;
+    //     } catch(error){
+    //         console.log(error);
+    //         return false;
+    //     }
+    // }
 
     async addItemsForJob(id){
         try{
