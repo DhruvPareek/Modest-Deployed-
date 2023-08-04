@@ -47,15 +47,15 @@ app.patch('/updateJob', (request, response) => {
 });
 
 //update a job in the database, it can update name, startDate, endDate
-// app.patch('/updateEmissionsTotals/:id', (request, response) => {
-//     const { id } = request.params;
-//     const db = JobDBService.getDBServiceInstance();
-//     const result = db.updateJobEmissionTotals(id);
+app.patch('/updateEmissionsTotals/:id', (request, response) => {
+    const { id } = request.params;
+    const { totalCO2, totalN2O, totalCH4 } = request.body;     const db = JobDBService.getDBServiceInstance();
+    const result = db.updateJobEmissionTotals(id, totalCO2, totalN2O, totalCH4);
     
-//     result
-//     .then(data => response.json({success : data}))
-//     .catch(err => console.log(err));
-// });
+    result
+    .then(data => response.json({success : data}))
+    .catch(err => console.log(err));
+});
 
 //delete a job from the database
 app.delete('/deleteJob/:id', (request, response) => {

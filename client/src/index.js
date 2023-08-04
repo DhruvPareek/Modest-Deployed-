@@ -137,16 +137,6 @@ export function updateItemSubtotals(CO2subtotal, N2Osubtotal, CH4subtotal, id, j
   .catch(err => console.log(err));
 }
 
-/*This function updates the emission totals for a job this gets
-called after an item from that job gets its subtotals updated*/
-// export function updateJobEmissionTotals(jobID){
-//   fetch('http://localhost:5000/updateEmissionsTotals/' + jobID, {
-//     method: 'PATCH'
-//   })
-//   .then(response => response.json())
-//   .catch(err => console.log(err));
-// }
-
 //This waits until the page is loaded before running the code that retrieves all items from MySQL table
 document.addEventListener("DOMContentLoaded", function () {
   fetch('http://localhost:5000/getAllJobs')

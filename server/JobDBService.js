@@ -56,7 +56,6 @@ class JobDBService{
                         console.log("Error:", err);
                         reject(new Error(err.message));
                     }
-                    console.log("Result:", result);
                     resolve(result.insertId);
                 })
             });
@@ -79,7 +78,6 @@ class JobDBService{
                         console.log("Error:", err);
                         reject(new Error(err.message));
                     }
-                    console.log("Result:", result);
                     resolve(result.affectedRows);
                 })
             });
@@ -91,7 +89,7 @@ class JobDBService{
         }
     }
 
-    // //Sends query to database to update a job in the Jobs list table
+    //Sends query to database to update a job in the Jobs list table
     async updateJobByID(id, name, startDate, endDate){
         try {
             id = parseInt(id, 10);
@@ -102,7 +100,6 @@ class JobDBService{
                         console.log("Error:", err);
                         reject(new Error(err.message));
                     }
-                    console.log("Result:", result);
                     resolve(result.affectedRows);
                 })
             });
@@ -114,11 +111,24 @@ class JobDBService{
         }
     }
 
-    async addItemsForJob(id){
-        try{
+    /* This takes sum of all emissions subtotals for a job, then sets the totals for that job*/
+    async updateJobEmissionTotals(id, totalCO2, totalN2O, totalCH4){
+        try {
             id = parseInt(id, 10);
 
-        }catch(error){
+            const response = await new Promise((resolve, reject) => {
+                const query = "UPDATE Jobs_List SET CO2Emissions = ?, N2OEmissions = ?, CH4Emissions = ?  WHERE id = ?";
+                connection.query(query, [totalCO2, totalN2O, totalCH4, id], (err, result) => {
+                    if(err) {
+                        console.log("Error:", err);
+                        reject(new Error(err.message));
+                    }
+                    resolve(result.affectedRows);
+                })
+            });
+
+            return response === 1 ? true : false;
+        } catch(error){
             console.log(error);
             return false;
         }

@@ -4,13 +4,15 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { loadItemsIntoJobPage, handleItemEditClick, updateItemSubtotals} from './index.js';
 
+//EMISSIONS -> https://www.epa.gov/system/files/documents/2023-03/ghg_emission_factors_hub.pdf
+
 /*Calculates subtotals for type 1 data which is driving mileage
 for days worked and distance traveled*/
 const calculateSubtotalsType1 = (data1, data2) => {
   const totalMileage = data1 * data2;
   const CO2_Subtotal = totalMileage * 0.332;
   const N2O_Subtotal = totalMileage * 0.007;
-  const CH4_Subtotal = totalMileage * 0.007;
+  const CH4_Subtotal = totalMileage * 0.008;
   return {
     CO2_Subtotal: CO2_Subtotal,
     N2O_Subtotal: N2O_Subtotal,
@@ -39,7 +41,6 @@ const updateSubtotals = (item, jobID) => {
       item.N2O_Subtotal = subtotals.N2O_Subtotal;
       item.CH4_Subtotal = subtotals.CH4_Subtotal;
       updateItemSubtotals(subtotals.CO2_Subtotal, subtotals.N2O_Subtotal, subtotals.CH4_Subtotal, item.ID, jobID);
-      // updateJobEmissionTotals(jobID);
     }
   }else if(item.Data_1 > 0 && item.Data_2 === null){
     if((item.Data_1_Type === 'Car Mileage' || item.Data_1_Type === 'Mileage') && item.Data_2_Type === null){
@@ -48,7 +49,6 @@ const updateSubtotals = (item, jobID) => {
       item.N2O_Subtotal = subtotals.N2O_Subtotal;
       item.CH4_Subtotal = subtotals.CH4_Subtotal;
       updateItemSubtotals(subtotals.CO2_Subtotal, subtotals.N2O_Subtotal, subtotals.CH4_Subtotal, item.ID);
-      // updateJobEmissionTotals(jobID);
     }
   }
 };
@@ -58,6 +58,33 @@ function JobPage() {
   const {jobName, jobID} = useParams();
 
   const [editingIndex, setEditingIndex] = useState(null);
+
+    // Function to calculate the total CO2
+    const calculateTotalEmissions = () => {
+      let totalCO2 = 0;
+      let totalN2O = 0;
+      let totalCH4 = 0;
+      items.forEach(item => {
+        if(item.CO2_Subtotal === null) item.CO2_Subtotal = 0;
+        if(item.N2O_Subtotal === null) item.N2O_Subtotal = 0;
+        if(item.CH4_Subtotal === null) item.CH4_Subtotal = 0;  
+        totalCO2 += item.CO2_Subtotal;
+        totalN2O += item.N2O_Subtotal;
+        totalCH4 += item.CH4_Subtotal;
+      });
+
+      fetch('http://localhost:5000/updateEmissionsTotals/' + jobID, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: jobID, totalCO2: totalCO2, totalN2O: totalN2O, totalCH4: totalCH4})    
+      })
+      .then(response => response.json())
+      .catch(err => console.log(err));
+
+    };
+  
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
@@ -77,6 +104,8 @@ function JobPage() {
       newItems[index] = updatedItem;
       setItems(newItems);
       setEditingIndex(null);
+      updateSubtotals(updatedItem, jobID);
+      calculateTotalEmissions();
     }
 
     return (
@@ -127,7 +156,6 @@ function JobPage() {
                 <td>{item.EPA_Criteria}</td>
                 <td><span className="data-type">{item.Data_1_Type}</span><br />{item.Data_1 === null ? 'Empty' : item.Data_1}</td>
                 <td><span className="data-type">{item.Data_2_Type}</span><br />{item.Data_2 === null ? 'Empty' : item.Data_2}</td>
-                {updateSubtotals(item, jobID)}
                 <td>{item.CO2_Subtotal.toFixed(4) + "kg"}</td><td>{item.N2O_Subtotal.toFixed(4) + "kg"}</td><td>{item.CH4_Subtotal.toFixed(4) + "kg"}</td>
                 <td><button className="editItem-btn" onClick={() => editItem(index)} data-id={item.ID} >Edit</button></td>
               </React.Fragment>
