@@ -65,6 +65,18 @@ function Dashboard() {
     setEditingIndex(null);
   }
 
+  function validateDatesAndAddJob() {
+    // Regex to check the MM-DD-YYYY date format
+    const dateRegex = /^(0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])[-](19|20)\d\d$/;
+  
+    if (!dateRegex.test(startDate) || !dateRegex.test(endDate)) {
+      alert('Date format needs to be in MM-DD-YYYY');
+    } else {
+      addRow();
+      addJob();
+    }
+  }
+
     return (
       <section>
       <div className="header">
@@ -79,7 +91,7 @@ function Dashboard() {
         <input type="text" id="StartDate-Input" value={startDate} onChange={e => setStartDate(e.target.value)} placeholder="MM-DD-YYYY"/>
         <label>End Date:  </label>
         <input type="text" id="EndDate-Input" value={endDate} onChange={e => setEndDate(e.target.value)} placeholder="MM-DD-YYYY"/>
-        <button className="AddJob" onClick={() => {addRow();addJob();}} id="AddJob-btn" disabled={!jobName || !startDate || !endDate}>Add Job</button>
+        <button className="AddJob" onClick={() => validateDatesAndAddJob()} id="AddJob-btn" disabled={!jobName || !startDate || !endDate}>Add Job</button>
       </div>
 
       {/* Table of jobs */}
