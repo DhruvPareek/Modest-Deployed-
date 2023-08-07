@@ -65,6 +65,7 @@ function Dashboard() {
     setEditingIndex(null);
   }
 
+  //This function checks if the given dates by the user are properly formatted then will add the job to the database or display an alert for the wrong format
   function validateDatesAndAddJob() {
     // Regex to check the MM-DD-YYYY date format
     const dateRegex = /^(0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])[-](19|20)\d\d$/;
@@ -74,6 +75,22 @@ function Dashboard() {
     } else {
       addRow();
       addJob();
+    }
+  }
+
+  //This function checks if the given dates by the user are properly formatted then will update the job or display an alert for the wrong format
+  function validateDatesAndUpdateJob() {
+    const startDateInput = document.getElementById("update-startDate-input").value;
+    const endDateInput = document.getElementById("update-endDate-input").value;
+    
+    // Regex to check the MM-DD-YYYY date format
+    const dateRegex = /^(0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])[-](19|20)\d\d$/;
+    
+    if (!dateRegex.test(startDateInput) || !dateRegex.test(endDateInput)) {
+      alert('Start and End Date format need to be in MM-DD-YYYY');
+    } else {
+      saveRow();
+      handleJobEditClick();
     }
   }
 
@@ -125,7 +142,7 @@ function Dashboard() {
                 <td>{row.N2OEmissions + "kg"}</td>
                 <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
                 <td><button className="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
-                <td><button className="UpdateJob-btn" data-id={row.ID} onClick={() => {saveRow(); handleJobEditClick();}}>Save</button></td>
+                <td><button className="UpdateJob-btn" data-id={row.ID} onClick={validateDatesAndUpdateJob}>Save</button></td>
                 {/* The save button calls the handleEditClick function to send query to databse to update */}
             </React.Fragment>
           ) : (
