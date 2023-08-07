@@ -84,7 +84,6 @@ function JobPage() {
       .catch(err => console.log(err));
 
     };
-  
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
@@ -106,6 +105,20 @@ function JobPage() {
       setEditingIndex(null);
       updateSubtotals(updatedItem, jobID);
       calculateTotalEmissions();
+    }
+
+    //This function is called to check if the data inputs are numbers and if so, it will save the item or else it will alert the user
+    function validateDataAndSaveItem(index, item) {
+      const data1InputValue = document.getElementById("update-data1-input").value;
+      const data2InputValue = document.getElementById("update-data2-input").value;
+    
+      // Check if the values are numbers
+      if (!isNaN(data1InputValue) && (data2InputValue === '' || !isNaN(data2InputValue))) {
+        saveItem(index, item);
+        handleItemEditClick();
+      } else {
+        alert('Please enter a valid number for data fields.');
+      }
     }
 
     return (
@@ -146,7 +159,7 @@ function JobPage() {
                 <td><span className="data-type">{item.Data_1_Type}</span><input type="text" style={{width: '90px'}} data-id={item.ID} id="update-data1-input" defaultValue={item.Data_1} onChange={(e) => item.Data_1 = e.target.value} /></td>
                 <td><span className="data-type">{item.Data_2_Type}</span><input type="text" style={{width: '90px'}} id="update-data2-input" defaultValue={item.Data_2} onChange={(e) => item.Data_2 = e.target.value} /></td>
                 <td>{item.CO2_Subtotal + "kg"}</td><td>{item.N2O_Subtotal + "kg"}</td><td>{item.CH4_Subtotal + "kg"}</td>
-                <td><button className="UpdateItem-btn" onClick={() => {saveItem(index, item);handleItemEditClick();}}>Save</button></td>
+                <td><button className="UpdateItem-btn" onClick={() => validateDataAndSaveItem(index, item)}>Save</button></td>
               </React.Fragment>
             ) : (
               <React.Fragment>
@@ -166,6 +179,6 @@ function JobPage() {
         </table>
         </section>
     );
-}
+  }
 
 export default JobPage;
