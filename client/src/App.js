@@ -3,7 +3,7 @@ import "./app.css";
 import { Routes, Route, Link } from "react-router-dom";
 import JobPage from "./JobPage";
 import { useState, useEffect } from "react";
-import { handleJobEditClick, addJob, deleteItemByJobID, deleteJobById } from './index.js';
+import { handleJobEditClick, addJob, deleteItemByJobID, deleteJobById } from './utils.js';
 
 //Title of dashboard and routes to different pages
 export default function App() {
@@ -33,17 +33,21 @@ function Dashboard() {
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
-      fetch('http://localhost:5000/getAllJobs')
+      fetch('https://modest-e0ffdbc6f86a.herokuapp.com/getAllJobs')
         .then(response => response.json())
         .then(data => {
-          setRows(data.data);
-        });
+          if (data && data.data && Array.isArray(data.data)) {
+            setRows(data.data);
+        } else {
+            console.error("Received unexpected data format:", data);
+            setRows([]);  // Ensure rows is always an array
+        }        
+        console.log(data.data);});
     }, [newJob]);
   
     //Everytime we add a job, we change the state of newJob and refresh the page
     const addRow = () => {
       setNewJob(!newJob);
-      document.location.reload();
     }
 
     const delRow = (index) => {
@@ -56,7 +60,7 @@ function Dashboard() {
     }
 
   //This changes the job that we want to edit into textboxes that can be typed into
-    const editRow = (index) => {
+  const editRow = (index) => {
       setEditingIndex(index);
   }
   
@@ -92,6 +96,11 @@ function Dashboard() {
       saveRow();
       handleJobEditClick();
     }
+  }
+
+  function convertMySQLDateDisplayDate(date){
+    date = date.split('T')[0];
+    return date.split('-')[1] +'-'+ date.split('-')[2] +'-'+ date.split('-')[0];
   }
 
     return (
@@ -133,14 +142,14 @@ function Dashboard() {
                 {/* <td>{row.ID}</td> */}
                 <td><input type="text" data-id={row.ID} id="update-name-input" defaultValue={row.Name} /></td>
                 <td>
-                    <input type="text" id="update-startDate-input" defaultValue={new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')} />
+                    <input type="text" id="update-startDate-input" defaultValue={convertMySQLDateDisplayDate(row.Start_Date)} />
                     {' to '}
-                    <input type="text" id="update-endDate-input" defaultValue={new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')} />
+                    <input type="text" id="update-endDate-input" defaultValue={convertMySQLDateDisplayDate(row.End_Date)} />
                 </td>
                 <td>{row.CO2Emissions + "kg"}</td>
                 <td>{row.CH4Emissions + "kg"}</td>
                 <td>{row.N2OEmissions + "kg"}</td>
-                <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
+                <td>{convertMySQLDateDisplayDate(row.Date_Added)}</td>
                 <td><button className="delete-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}} disabled={true}>Delete</button></td>
                 <td><button className="UpdateJob-btn" data-id={row.ID} onClick={validateDatesAndUpdateJob}>Save</button></td>
                 {/* The save button calls the handleEditClick function to send query to databse to update */}
@@ -149,11 +158,16 @@ function Dashboard() {
             <React.Fragment>
                 {/* <td>{row.ID}</td> */}
                 <td><Link to={`/job/${row.Name}/${row.ID}`}>{row.Name}</Link></td>
-                <td>{new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}{' to '}{new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
+                {/* <td>{new Date(row.Start_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}{' to '}{new Date(row.End_Date).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td> */}
+                <td>
+                {convertMySQLDateDisplayDate(row.Start_Date)}
+                {' to '}
+                {convertMySQLDateDisplayDate(row.End_Date)}
+                </td>
                 <td>{row.CO2Emissions + "kg"}</td>
                 <td>{row.CH4Emissions + "kg"}</td>
                 <td>{row.N2OEmissions + "kg"}</td>
-                <td>{new Date(row.Date_Added).toLocaleDateString('en-US', {day: '2-digit', month: '2-digit', year: 'numeric'}).replace(/\//g, '-')}</td>
+                <td>{convertMySQLDateDisplayDate(row.Date_Added)}</td>
                 <td><button className="deleteJob-btn" data-id={row.ID} onClick={() => delRow(index)} style={{padding: '0', width: '55px', height: '25px'}}>Delete</button></td>
                 <td><button className="editJob-btn" data-id={row.ID} onClick={() => editRow(index)}>Edit</button></td>
             </React.Fragment>

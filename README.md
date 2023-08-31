@@ -1,0 +1,5 @@
+This is a Scope 3 emissions calculator. The site has a dashboard which is the main page. On the dashboard you can add a job with a user given name, start date, and end date. You can then edit this job to change the name, start date, or end date fields or press the name of the job which is a link leading to that job's Job Page.
+
+Every Job Page has a list of items from an AICP payroll and the corresponding method that the emissions for that job gets calculated. For items that can have their emissions calculated, upon entering data values, the corresponding CO2, CH4, and N2O emissions will be calculated. On the dashboard, the total emissions for all jobs will be summed from every item and displayed.
+
+This code for the site is split into a client (front end) and server (back end). The client is written in React and the server is written in Node.js and SQL. The client is hosted on Netlify and the server is hosted on a Heroku MySQL table.

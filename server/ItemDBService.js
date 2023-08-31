@@ -5,12 +5,12 @@ dotenv.config();
 
 //Database connection
 const connection = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    port: process.env.DB_PORT
+    host: "en1ehf30yom7txe7.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+    user: "l5r1l0kwcfged9qv",
+    password: "y1nd5jf6ei8vu86f",
+    database: "ekkxi4fhns28ioam"
 });
+//mysql://l5r1l0kwcfged9qv:y1nd5jf6ei8vu86f@en1ehf30yom7txe7.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ekkxi4fhns28ioam
 
 connection.connect((err) => {
     if(err) {
@@ -336,6 +336,7 @@ class ItemDBService{
                 });
             }
             return totalAffectedRows === items.length ? true : false;
+
             }catch(error){
                 console.log(error);
             return false;

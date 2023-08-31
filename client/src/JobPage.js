@@ -2,7 +2,7 @@ import "./JobPage.css";
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { loadItemsIntoJobPage, handleItemEditClick, updateItemSubtotals} from './index.js';
+import { loadItemsIntoJobPage, handleItemEditClick, updateItemSubtotals} from './utils.js';
 
 //EMISSIONS -> https://www.epa.gov/system/files/documents/2023-03/ghg_emission_factors_hub.pdf
 
@@ -73,7 +73,7 @@ function JobPage() {
         totalCH4 += item.CH4_Subtotal;
       });
 
-      fetch('http://localhost:5000/updateEmissionsTotals/' + jobID, {
+      fetch('https://modest-e0ffdbc6f86a.herokuapp.com/updateEmissionsTotals/' + jobID, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
@@ -87,7 +87,7 @@ function JobPage() {
 
     //This populates the array with jobs from database, it will run everytime newJob is changed
     useEffect(() => {
-      fetch('http://localhost:5000/getAllItems/' + jobID )
+      fetch('https://modest-e0ffdbc6f86a.herokuapp.com/getAllItems/' + jobID )
         .then(response => response.json())
         .then(data => {
           setItems(data.data);
